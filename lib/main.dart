@@ -1,6 +1,7 @@
 import 'package:eating_habits_mobile/models/weight.dart';
-import 'package:eating_habits_mobile/widgets/chart.dart';
+import 'package:eating_habits_mobile/widgets/charts/weight-chart.dart';
 import 'package:eating_habits_mobile/widgets/forms/weight-form.dart';
+import 'package:eating_habits_mobile/widgets/weight-stats.dart';
 import 'package:eating_habits_mobile/widgets/weight-summary.dart';
 import 'package:flutter/material.dart';
 
@@ -53,24 +54,24 @@ class _MyHomePageState extends State<MyHomePage> {
       weight: 88.4,
     ),
     Weight(
-      date: DateTime(2020, 4, 6),
-      weight: 88.4,
+      date: DateTime(2020, 4, 7),
+      weight: 88.2,
     ),
     Weight(
-      date: DateTime(2020, 4, 6),
-      weight: 88.4,
+      date: DateTime(2020, 4, 8),
+      weight: 88.0,
     ),
     Weight(
-      date: DateTime(2020, 4, 6),
-      weight: 88.4,
+      date: DateTime(2020, 4, 9),
+      weight: 87.4,
     ),
     Weight(
-      date: DateTime(2020, 4, 6),
-      weight: 88.4,
+      date: DateTime(2020, 4, 10),
+      weight: 87.0,
     ),
     Weight(
-      date: DateTime(2020, 4, 6),
-      weight: 88.4,
+      date: DateTime(2020, 4, 11),
+      weight: 86.6,
     ),
   ];
 
@@ -103,24 +104,30 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.only(
-            top: 20,
+            top: 0,
             left: 10,
             right: 10,
-            bottom: 0
+            bottom: 0,
           ),
           child: SingleChildScrollView(
             child: Column(
               children: <Widget>[
                 Container(
-                  height: (mediaQuery.size.height -
-                          appBar.preferredSize.height) *
-                      0.3,
-                  child: SimpleTimeSeriesChart.withSampleData(),
+                  height:
+                      (mediaQuery.size.height - appBar.preferredSize.height) *
+                          0.15,
+                  child: WeightStats(),
                 ),
                 Container(
-                  height: (mediaQuery.size.height -
-                          appBar.preferredSize.height) *
-                      0.7,
+                  height:
+                      (mediaQuery.size.height - appBar.preferredSize.height) *
+                          0.3,
+                  child: WeightChart(weights),
+                ),
+                Container(
+                  height:
+                      (mediaQuery.size.height - appBar.preferredSize.height) *
+                          0.5,
                   child: ListView.builder(
                     itemCount: weights.length,
                     itemBuilder: (BuildContext ctx, int index) {
