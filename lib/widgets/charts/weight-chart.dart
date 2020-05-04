@@ -1,6 +1,5 @@
-/// Timeseries chart example
 import 'package:charts_flutter/flutter.dart' as charts;
-import 'package:eating_habits_mobile/models/weight.dart';
+import '../../models/weight.dart';
 import 'package:flutter/material.dart';
 
 class WeightSeries {

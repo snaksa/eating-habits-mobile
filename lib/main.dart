@@ -1,4 +1,4 @@
-import 'package:eating_habits_mobile/widgets/screens/water-supply.dart';
+import './widgets/screens/water-supply.dart';
 import 'package:flutter/material.dart';
 import './widgets/screens/weight-balance.dart';
 
