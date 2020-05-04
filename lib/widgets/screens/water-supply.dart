@@ -1,5 +1,6 @@
+import 'package:eating_habits_mobile/widgets/water-daily-summary.dart';
 import 'package:flutter/material.dart';
-import 'package:percent_indicator/linear_percent_indicator.dart';
+import '../../widgets/water-daily-stats.dart';
 import '../../models/water.dart';
 
 class WaterSupplyScreen extends StatefulWidget {
@@ -9,7 +10,7 @@ class WaterSupplyScreen extends StatefulWidget {
 
 class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
   final DateTime todayDate = DateTime(2020, 4, 2);
-  final List<Water> weights = [
+  final List<Water> waters = [
     Water(
       date: DateTime(2020, 4, 2, 9, 30),
       amount: 500,
@@ -35,15 +36,24 @@ class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
   //   });
   // }
 
-  // void _deleteWeightRecord(Weight weight) {
-  //   setState(() {
-  //     weights.removeWhere((w) => w.id == weight.id);
-  //   });
-  // }
+  void _deleteWaterRecord(Water water) {
+    setState(() {
+      waters.removeWhere((w) => w.id == water.id);
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+
+    final waterRecords = waters
+        .where((Water water) =>
+            water.date.day == todayDate.day &&
+            water.date.month == todayDate.month &&
+            water.date.year == todayDate.year)
+        .toList();
+
+    waterRecords.sort((Water a, Water b) => a.date.compareTo(b.date));
 
     final appBar = AppBar(
       title: Text(
@@ -52,7 +62,11 @@ class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
       ),
     );
 
-    int current = 2500;
+    double current = 0;
+    waterRecords.forEach((Water water) {
+      current += water.amount;
+    });
+    
     int target = 5000;
 
     return Scaffold(
@@ -65,63 +79,36 @@ class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
             right: 10,
             bottom: 0,
           ),
-          child: Column(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.topCenter,
-                height:
-                    (mediaQuery.size.height - appBar.preferredSize.height - mediaQuery.padding.top) *
-                        0.2,
-                child: Column(
-                  children: <Widget>[
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Today',
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 14,
-                              ),
-                              LinearPercentIndicator(
-                                animation: true,
-                                lineHeight: 20.0,
-                                animationDuration: 500,
-                                percent:
-                                    current / target > 1 ? 1 : current / target,
-                                center: Text('${current}ml of ${target}ml',
-                                    style: TextStyle(color: Colors.white)),
-                                linearStrokeCap: LinearStrokeCap.roundAll,
-                                progressColor: current / target < 0.3
-                                    ? Colors.red.shade500
-                                    : current / target < 0.7
-                                        ? Colors.orange.shade900
-                                        : current / target < 0.9
-                                            ? Colors.lightGreen
-                                            : Colors.green,
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
+          child: SingleChildScrollView(
+            child: Column(
+              children: <Widget>[
+                Container(
+                  alignment: Alignment.topCenter,
+                  height: (mediaQuery.size.height -
+                          appBar.preferredSize.height -
+                          mediaQuery.padding.top) *
+                      0.2,
+                  child: Column(
+                    children: <Widget>[
+                      WaterDailyStats(current: current, target: target),
+                    ],
+                  ),
                 ),
-              ),
-              Container(
-                height:
-                    (mediaQuery.size.height - appBar.preferredSize.height - mediaQuery.padding.top) *
-                        0.8,
-              ),
-            ],
+                Container(
+                  height: (mediaQuery.size.height -
+                          appBar.preferredSize.height -
+                          mediaQuery.padding.top) *
+                      0.8,
+                  child: ListView.builder(
+                    itemCount: waterRecords.length,
+                    itemBuilder: (BuildContext ctx, int index) {
+                      return WaterDailySummary(waterRecords[index],
+                          deleteWaterRecord: _deleteWaterRecord);
+                    },
+                  ),
+                ),
+              ],
+            ),
           ),
         ),
       ),
