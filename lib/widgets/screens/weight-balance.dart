@@ -1,3 +1,4 @@
+import 'package:eating_habits_mobile/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 import '../../models/weight.dart';
 import '../../widgets/charts/weight-chart.dart';
@@ -6,6 +7,8 @@ import '../../widgets/weight-stats.dart';
 import '../../widgets/weight-summary.dart';
 
 class WeightBalanceScreen extends StatefulWidget {
+  static const String routeName = '/weight-balance';
+
   @override
   _WeightBalanceScreenState createState() => _WeightBalanceScreenState();
 }
@@ -80,6 +83,7 @@ class _WeightBalanceScreenState extends State<WeightBalanceScreen> {
 
     return Scaffold(
       appBar: appBar,
+      drawer: AppDrawer(),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.only(

@@ -13,12 +13,16 @@ class MyApp extends StatelessWidget {
         primarySwatch: Colors.cyan,
         accentColor: Colors.cyanAccent,
         textTheme: TextTheme(
-          title: TextStyle(
+          headline6: TextStyle(
             fontSize: 16,
           ),
         ),
       ),
       home: WaterSupplyScreen(),
+      routes: {
+            WaterSupplyScreen.routeName: (ctx) => WaterSupplyScreen(),
+            WeightBalanceScreen.routeName: (ctx) => WeightBalanceScreen(),
+      }
     );
   }
 }

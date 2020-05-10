@@ -53,7 +53,7 @@ class _WaterDailySummaryState extends State<WaterDailySummary> {
                     Text(
                       DateFormat.Hm().format(widget.water.date),
                       textAlign: TextAlign.center,
-                      style: Theme.of(context).textTheme.title,
+                      style: Theme.of(context).textTheme.headline6,
                     ),
                   ],
                 ),
@@ -62,7 +62,7 @@ class _WaterDailySummaryState extends State<WaterDailySummary> {
                 child: Text(
                   '${widget.water.amount.toStringAsFixed(0)} ml',
                   textAlign: TextAlign.right,
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               ),
             ],

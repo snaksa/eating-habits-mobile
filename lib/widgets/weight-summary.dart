@@ -56,14 +56,14 @@ class _WeightSummaryState extends State<WeightSummary> {
                 child: Text(
                   DateFormat.yMMMd().format(widget.weight.date),
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               ),
               Expanded(
                 child: Text(
                   '${widget.weight.weight.toStringAsFixed(2)} kg',
                   textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.title,
+                  style: Theme.of(context).textTheme.headline6,
                 ),
               ),
               Expanded(
@@ -74,7 +74,7 @@ class _WeightSummaryState extends State<WeightSummary> {
                       '${widget.diff.abs().toStringAsFixed(3)} kg',
                       textAlign: TextAlign.center,
                       style: TextStyle(
-                        fontSize: Theme.of(context).textTheme.title.fontSize,
+                        fontSize: Theme.of(context).textTheme.headline6.fontSize,
                         color: widget.color,
                       ),
                     ),

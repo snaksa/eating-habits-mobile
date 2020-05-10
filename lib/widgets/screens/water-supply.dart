@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
 
+import '../../widgets/drawer.dart';
 import '../../widgets/screens/water-supply-daily-stats.dart';
 import '../../widgets/screens/water-supply-daily.dart';
 
 class WaterSupplyScreen extends StatefulWidget {
+  static const String routeName = '/water-supply';
+
   @override
   _WaterSupplyScreenState createState() => _WaterSupplyScreenState();
 }
@@ -26,6 +29,7 @@ class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
           ),
           title: Text('Water Supply'),
         ),
+        drawer: AppDrawer(),
         body: TabBarView(
           children: [
             WaterSupplyDailyScreen(),
