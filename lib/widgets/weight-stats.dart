@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 
 class WeightStats extends StatelessWidget {
-  const WeightStats({Key key}) : super(key: key);
+  final double _start;
+  final double _current;
+  const WeightStats(this._current, this._start);
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +28,7 @@ class WeightStats extends StatelessWidget {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
-                        Text('90.0kg'),
+                        Text('${_start}kg'),
                       ],
                     ),
                   ),
@@ -43,7 +45,7 @@ class WeightStats extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '86.0kg',
+                        '${_current}kg',
                         style: TextStyle(
                           color: Theme.of(context).primaryColor,
                           fontWeight: FontWeight.bold,

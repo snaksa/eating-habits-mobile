@@ -1,9 +1,13 @@
-import 'dart:math';
-
 class Weight {
-  final int id = Random().nextInt(10000);
-  final DateTime date;
-  final double weight;
+  int id;
+  DateTime date;
+  double weight;
 
-  Weight({this.date, this.weight});
+  Weight({this.id, this.date, this.weight});
+
+  Weight.fromJSON(Map<String, dynamic> json) {
+    this.id = json['id'];
+    this.date = DateTime.parse(json['date']).toLocal();
+    this.weight = double.parse(json['weight'].toString());
+  }
 }

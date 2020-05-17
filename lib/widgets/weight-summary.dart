@@ -10,11 +10,11 @@ class WeightSummary extends StatefulWidget {
   WeightSummary(this.weight, {this.diff, this.deleteWeightRecord});
 
   Color get color =>
-      this.diff > 0 ? Colors.red : this.diff < 0 ? Colors.green : Colors.black;
+      this.diff < 0 ? Colors.red : this.diff > 0 ? Colors.green : Colors.black;
 
-  IconData get icon => this.diff > 0
+  IconData get icon => this.diff < 0
       ? Icons.arrow_upward
-      : this.diff < 0 ? Icons.arrow_downward : null;
+      : this.diff > 0 ? Icons.arrow_downward : null;
 
   @override
   _WeightSummaryState createState() => _WeightSummaryState();

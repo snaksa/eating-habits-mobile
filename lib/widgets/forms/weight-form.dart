@@ -1,69 +1,137 @@
-import 'package:eating_habits_mobile/models/weight.dart';
+import 'package:eating_habits_mobile/widgets/screens/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
+import '../../exceptions/http_exception.dart';
+import '../../models/weight.dart';
+import '../../providers/weight-provider.dart';
+import '../../widgets/dialog.dart' as dialog;
 
 class WeightForm extends StatefulWidget {
-  final Function addWeightRecord;
-
-  WeightForm(this.addWeightRecord);
+  static final String routeName = '/weight-form';
 
   @override
   _WeightSummaryState createState() => _WeightSummaryState();
 }
 
 class _WeightSummaryState extends State<WeightForm> {
-  TextEditingController weightTextController = TextEditingController();
-  TextEditingController dateTextController = TextEditingController();
-  DateTime selectedDate = DateTime.now();
+  final Map<String, dynamic> _formData = {
+    'weight': '',
+    'date': DateTime.now(),
+  };
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController dateController = TextEditingController();
+
+  @override
+  void initState() {
+    dateController.text = DateFormat.yMMMd().format(_formData['date']);
+    super.initState();
+  }
 
   void chooseDate() {
     showDatePicker(
       context: context,
-      initialDate: selectedDate,
+      initialDate: _formData['date'],
       firstDate: DateTime(2019),
       lastDate: DateTime.now(),
     ).then((picked) {
-      if (picked != null && picked != selectedDate)
+      if (picked != null && picked != _formData['date'])
         setState(() {
-          selectedDate = picked;
-          dateTextController.text = DateFormat.yMMMd().format(picked);
+          _formData['date'] = picked;
+          dateController.text = DateFormat.yMMMd().format(picked);
         });
     });
   }
 
-  void addRecord() {
-    if (selectedDate != null && weightTextController.text.isNotEmpty) {
-      Weight weight = Weight(
-          date: selectedDate, weight: double.parse(weightTextController.text));
-      widget.addWeightRecord(weight);
+  Future<void> addRecord() async {
+    if (!_formKey.currentState.validate()) {
+      return;
+    }
+    _formKey.currentState.save();
+
+    var selectedDate = _formData['date'];
+    var now = DateTime.now();
+    var date = DateTime(selectedDate.year, selectedDate.month, selectedDate.day,
+        now.hour, now.minute, now.second);
+    Weight weight = Weight(
+      date: date.toUtc(),
+      weight: double.parse(_formData['weight']),
+    );
+
+    try {
+      await Provider.of<WeightProvider>(context, listen: false)
+          .addWeightRecord(weight);
       Navigator.pop(context);
+    } on HttpException catch (error) {
+      dialog.Dialog(
+        'An Error Occurred!',
+        error.message,
+        {
+          'Okay': () {
+            Navigator.of(context).pop();
+            if (error.status == 403) {
+              Navigator.of(context).popAndPushNamed(AuthScreen.routeName);
+            }
+          }
+        },
+      ).show(context);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      child: Card(
-        elevation: 5,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Column(
-            children: <Widget>[
-              TextField(
-                decoration: InputDecoration(labelText: 'Weight'),
-                controller: weightTextController,
-                keyboardType: TextInputType.number,
+    return Scaffold(
+      appBar: AppBar(
+        title: Text(
+          'Add Record',
+          style: TextStyle(color: Colors.white),
+        ),
+        actions: <Widget>[
+          IconButton(
+            icon: Icon(Icons.save),
+            onPressed: addRecord,
+          ),
+        ],
+      ),
+      body: GestureDetector(
+        child: Card(
+          elevation: 5,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Weight'),
+                    keyboardType: TextInputType.number,
+                    validator: (value) {
+                      if (value.isEmpty || double.tryParse(value) == null) {
+                        return 'Invalid weight!';
+                      }
+
+                      return null;
+                    },
+                    onSaved: (value) {
+                      _formData['weight'] = value;
+                    },
+                  ),
+                  TextFormField(
+                    decoration: InputDecoration(labelText: 'Date'),
+                    controller: dateController,
+                    validator: (value) {
+                      if (_formData['date'] == null) {
+                        return 'Invalid date!';
+                      }
+
+                      return null;
+                    },
+                    onTap: chooseDate,
+                  ),
+                ],
               ),
-              TextField(
-                decoration: InputDecoration(labelText: 'Date'),
-                controller: dateTextController,
-                onTap: chooseDate,
-              ),
-              RaisedButton(
-                child: Text('Add'),
-                onPressed: addRecord,
-              )
-            ],
+            ),
           ),
         ),
       ),
