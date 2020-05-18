@@ -1,7 +1,14 @@
-import 'package:eating_habits_mobile/widgets/water-daily-summary.dart';
 import 'package:flutter/material.dart';
-import '../../widgets/water-daily-stats.dart';
+import 'package:intl/intl.dart';
+import 'package:provider/provider.dart';
+
 import '../../models/water.dart';
+import '../../providers/water-povider.dart';
+import '../../exceptions/http_exception.dart';
+import '../../widgets/water-daily-stats.dart';
+import '../../widgets/dialog.dart' as dialog;
+import '../../widgets/screens/auth.dart';
+import '../../widgets/water-daily-summary.dart';
 
 class WaterSupplyDailyScreen extends StatefulWidget {
   @override
@@ -9,51 +16,42 @@ class WaterSupplyDailyScreen extends StatefulWidget {
 }
 
 class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
-  final DateTime todayDate = DateTime(2020, 4, 2);
-  final List<Water> waters = [
-    Water(
-      date: DateTime(2020, 4, 2, 9, 30),
-      amount: 500,
-    ),
-    Water(
-      date: DateTime(2020, 4, 2, 11, 30),
-      amount: 1500,
-    ),
-    Water(
-      date: DateTime(2020, 4, 2, 13, 0),
-      amount: 250,
-    ),
-    Water(
-      date: DateTime(2020, 4, 2, 15, 10),
-      amount: 500,
-    ),
-  ];
+  var _isInit = true;
+  var _isLoading = false;
 
-  // void _addWeightRecord(Weight weight) {
-  //   setState(() {
-  //     weights.add(weight);
-  //     weights.sort((Weight a, Weight b) => a.date.compareTo(b.date));
-  //   });
-  // }
+  @override
+  void didChangeDependencies() {
+    if (_isInit) {
+      setState(() {
+        _isLoading = true;
+      });
+      Provider.of<WaterProvider>(context).fetchAndSetTodayWaterRecords().then(
+        (_) {
+          setState(() {
+            _isLoading = false;
+          });
+        },
+      ).catchError((error) {
+        dialog.Dialog('An error occured', error.message, {
+          'Okay': () {
+            Navigator.of(context).pop();
+            if (error.status == 403) {
+              Navigator.of(context).popAndPushNamed(AuthScreen.routeName);
+            }
+          },
+        }).show(context);
+      });
+    }
 
-  void _deleteWaterRecord(Water water) {
-    setState(() {
-      waters.removeWhere((w) => w.id == water.id);
-    });
+    _isInit = false;
+
+    super.didChangeDependencies();
   }
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
-
-    final waterRecords = waters
-        .where((Water water) =>
-            water.date.day == todayDate.day &&
-            water.date.month == todayDate.month &&
-            water.date.year == todayDate.year)
-        .toList();
-
-    waterRecords.sort((Water a, Water b) => a.date.compareTo(b.date));
+    final waterRecords = Provider.of<WaterProvider>(context).today;
 
     final appBar = AppBar(
       title: Text(
@@ -78,34 +76,94 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
           bottom: 0,
         ),
         child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              Container(
-                alignment: Alignment.topCenter,
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.2,
-                child: Column(
-                  children: <Widget>[
-                    WaterDailyStats(current: current, target: target),
-                  ],
-                ),
-              ),
-              Container(
-                height: (mediaQuery.size.height -
-                        appBar.preferredSize.height -
-                        mediaQuery.padding.top) *
-                    0.8,
-                child: ListView.builder(
-                  itemCount: waterRecords.length,
-                  itemBuilder: (BuildContext ctx, int index) {
-                    return WaterDailySummary(waterRecords[index],
-                        deleteWaterRecord: _deleteWaterRecord);
-                  },
-                ),
-              ),
-            ],
+          child: Consumer<WaterProvider>(
+            builder: (ctx, provider, _) => _isLoading
+                ? Container(child: CircularProgressIndicator())
+                : Column(
+                    children: <Widget>[
+                      Container(
+                        alignment: Alignment.topCenter,
+                        height: (mediaQuery.size.height -
+                                appBar.preferredSize.height -
+                                mediaQuery.padding.top) *
+                            0.2,
+                        child: Column(
+                          children: <Widget>[
+                            WaterDailyStats(current: current, target: target),
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: (mediaQuery.size.height -
+                                appBar.preferredSize.height -
+                                mediaQuery.padding.top) *
+                            0.8,
+                        child: ListView.builder(
+                          itemCount: waterRecords.length,
+                          itemBuilder: (BuildContext ctx, int index) {
+                            return Dismissible(
+                              key: ValueKey(provider.today[index].id),
+                              background: Container(
+                                color: Theme.of(context).errorColor,
+                                child: Icon(
+                                  Icons.delete,
+                                  color: Colors.white,
+                                  size: 40,
+                                ),
+                                alignment: Alignment.centerLeft,
+                                padding: EdgeInsets.only(left: 20),
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: 15,
+                                  vertical: 4,
+                                ),
+                              ),
+                              direction: DismissDirection.startToEnd,
+                              onDismissed: (_) {
+                                try {
+                                  Provider.of<WaterProvider>(context,
+                                          listen: false)
+                                      .removeWaterRecord(
+                                          provider.today[index].id);
+                                } on HttpException catch (error) {
+                                  dialog.Dialog(
+                                    'An Error Occurred!',
+                                    error.message,
+                                    {
+                                      'Okay': () {
+                                        Navigator.of(context).pop();
+                                        if (error.status == 403) {
+                                          Navigator.of(context).popAndPushNamed(
+                                              AuthScreen.routeName);
+                                        }
+                                      }
+                                    },
+                                  ).show(context);
+                                }
+                              },
+                              confirmDismiss: (_) {
+                                return dialog.Dialog(
+                                  'Are you sure?',
+                                  'The item will be deleted',
+                                  {
+                                    'Yes': () {
+                                      Navigator.of(ctx).pop(true);
+                                    },
+                                    'No': () {
+                                      Navigator.of(ctx).pop(false);
+                                    }
+                                  },
+                                ).show(context);
+                              },
+                              child: WaterDailySummary(
+                                waterRecords[index],
+                                DateFormat.Hm(),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                    ],
+                  ),
           ),
         ),
       ),

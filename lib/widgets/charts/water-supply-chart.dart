@@ -1,6 +1,6 @@
-import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:charts_flutter/flutter.dart' as charts;
 
 import '../../models/water.dart';
 
@@ -12,17 +12,16 @@ class WaterSeries {
 }
 
 class WaterSupplyChart extends StatelessWidget {
-  final List<Water> waterRecords = [
-    Water(date: DateTime(2020, 4, 1), amount: 3500),
-    Water(date: DateTime(2020, 4, 2), amount: 4500),
-    Water(date: DateTime(2020, 4, 3), amount: 5000),
-    Water(date: DateTime(2020, 4, 4), amount: 2000),
-    Water(date: DateTime(2020, 4, 5), amount: 2500),
-    Water(date: DateTime(2020, 4, 6), amount: 4500),
-    Water(date: DateTime(2020, 4, 7), amount: 4000),
-  ];
+  final List<Water> waters;
 
-  WaterSupplyChart();
+  WaterSupplyChart(this.waters);
+
+  List<Water> get waterRecords {
+    final records = [...this.waters];
+    records.sort((Water a, Water b) => a.date.compareTo(b.date));
+
+    return records;
+  }
 
   List<charts.Series<WaterSeries, String>> get seriesList {
     final data =
@@ -32,7 +31,7 @@ class WaterSupplyChart extends StatelessWidget {
       new charts.Series<WaterSeries, String>(
         id: 'Water',
         colorFn: (_, __) => charts.MaterialPalette.blue.shadeDefault,
-        domainFn: (WaterSeries water, _) => DateFormat.Md().format(water.date),
+        domainFn: (WaterSeries water, _) => DateFormat.Md().format(water.date.toLocal()),
         measureFn: (WaterSeries water, _) => water.amount,
         data: data,
       )

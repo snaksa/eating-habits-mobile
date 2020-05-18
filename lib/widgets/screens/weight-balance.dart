@@ -1,9 +1,9 @@
-import 'package:eating_habits_mobile/exceptions/http_exception.dart';
-import 'package:eating_habits_mobile/widgets/screens/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../exceptions/http_exception.dart';
 import '../../providers/weight-provider.dart';
+import '../../widgets/screens/auth.dart';
 import '../../widgets/drawer.dart';
 import '../../widgets/charts/weight-chart.dart';
 import '../../widgets/forms/weight-form.dart';

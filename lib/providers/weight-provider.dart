@@ -1,8 +1,8 @@
-import 'package:eating_habits_mobile/http/request.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../models/weight.dart';
+import '../http/request.dart' as http;
 
 class WeightProvider with ChangeNotifier {
   List<Weight> _items = [];

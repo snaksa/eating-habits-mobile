@@ -47,7 +47,7 @@ class Request {
 
 
   Future<Map<String, dynamic>> delete(String resource) async {
-    var response = await http.get(
+    var response = await http.delete(
       '${this.baseUrl}$resource',
       headers: this._authToken != null ? {'Authorization': this._authToken} : {},
     );

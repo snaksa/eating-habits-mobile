@@ -1,3 +1,4 @@
+import 'package:eating_habits_mobile/providers/water-povider.dart';
 import 'package:eating_habits_mobile/providers/weight-provider.dart';
 import 'package:eating_habits_mobile/widgets/forms/weight-form.dart';
 import 'package:flutter/material.dart';
@@ -19,9 +20,16 @@ class MyApp extends StatelessWidget {
           create: (_) => Auth(),
         ),
         ChangeNotifierProxyProvider<Auth, WeightProvider>(
-          update: (ctx, auth, previousProducts) => WeightProvider(
+          update: (ctx, auth, previous) => WeightProvider(
             auth.token,
-            previousProducts == null ? [] : previousProducts.items,
+            previous == null ? [] : previous.items,
+          ),
+        ),
+        ChangeNotifierProxyProvider<Auth, WaterProvider>(
+          update: (ctx, auth, previous) => WaterProvider(
+            auth.token,
+            previous == null ? [] : previous.today,
+            previous == null ? [] : previous.all,
           ),
         ),
       ],
