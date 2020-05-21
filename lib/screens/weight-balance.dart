@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../exceptions/http_exception.dart';
-import '../../providers/weight-provider.dart';
-import '../../widgets/screens/auth.dart';
-import '../../widgets/drawer.dart';
-import '../../widgets/charts/weight-chart.dart';
-import '../../widgets/forms/weight-form.dart';
-import '../../widgets/weight-stats.dart';
-import '../../widgets/weight-summary.dart';
-import '../../widgets/dialog.dart' as dialog;
+import './auth.dart';
+import '../exceptions/http_exception.dart';
+import '../providers/weight-provider.dart';
+import '../widgets/drawer.dart';
+import '../widgets/charts/weight-chart.dart';
+import '../widgets/forms/weight-form.dart';
+import '../widgets/weight-stats.dart';
+import '../widgets/weight-summary.dart';
+import '../widgets/dialog.dart' as dialog;
 
 class WeightBalanceScreen extends StatefulWidget {
   static const String routeName = '/weight-balance';
@@ -56,10 +56,14 @@ class _WeightBalanceScreenState extends State<WeightBalanceScreen> {
     final mediaQuery = MediaQuery.of(context);
 
     final appBar = AppBar(
-      title: Text(
-        'Weight Balance',
-        style: TextStyle(color: Colors.white),
-      ),
+      title: Text('Weight Balance'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.add),
+          onPressed: () =>
+              Navigator.of(context).pushNamed(WeightForm.routeName),
+        ),
+      ],
     );
 
     final availableHeight =
@@ -173,14 +177,6 @@ class _WeightBalanceScreenState extends State<WeightBalanceScreen> {
             ),
           ),
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        tooltip: 'Add Record',
-        child: Icon(Icons.add),
-        foregroundColor: Colors.white,
-        onPressed: () {
-          Navigator.of(context).pushNamed(WeightForm.routeName);
-        },
       ),
     );
   }

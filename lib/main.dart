@@ -1,14 +1,15 @@
 import 'package:eating_habits_mobile/providers/water-povider.dart';
 import 'package:eating_habits_mobile/providers/weight-provider.dart';
+import 'package:eating_habits_mobile/screens/register.dart';
 import 'package:eating_habits_mobile/widgets/forms/water-supply-form.dart';
 import 'package:eating_habits_mobile/widgets/forms/weight-form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'providers/auth.dart';
-import './widgets/screens/water-supply.dart';
-import './widgets/screens/weight-balance.dart';
-import './widgets/screens/auth.dart';
+import './screens/water-supply/water-supply.dart';
+import './screens/weight-balance.dart';
+import './screens/auth.dart';
 
 void main() => runApp(MyApp());
 
@@ -38,6 +39,17 @@ class MyApp extends StatelessWidget {
         builder: (ctx, auth, _) => MaterialApp(
             title: 'Eating Habits',
             theme: ThemeData(
+              appBarTheme: AppBarTheme(
+                iconTheme: IconThemeData(
+                  color: Colors.white, //change your color here
+                ),
+                textTheme: TextTheme(
+                  headline6: TextStyle(
+                    fontSize: 20,
+                    color: Colors.white,
+                  ),
+                ),
+              ),
               primarySwatch: Colors.cyan,
               accentColor: Colors.cyanAccent,
               textTheme: TextTheme(
@@ -47,7 +59,7 @@ class MyApp extends StatelessWidget {
               ),
             ),
             home: auth.isAuth
-                ? WeightBalanceScreen()
+                ? WaterSupplyScreen()
                 : FutureBuilder(
                     future: auth.tryAutoLogin(),
                     builder: (ctx, authResultSnapshot) =>
@@ -64,6 +76,7 @@ class MyApp extends StatelessWidget {
               WeightForm.routeName: (ctx) => WeightForm(),
               WaterSupplyForm.routeName: (ctx) => WaterSupplyForm(),
               AuthScreen.routeName: (ctx) => AuthScreen(),
+              RegisterScreen.routeName: (ctx) => RegisterScreen(),
             }),
       ),
     );

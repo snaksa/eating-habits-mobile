@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../auth.dart';
 import '../../providers/water-povider.dart';
-import '../../widgets/screens/auth.dart';
 import '../../widgets/charts/water-supply-chart.dart';
 import '../../widgets/dialog.dart' as dialog;
 import '../../widgets/water-daily-summary.dart';
@@ -68,14 +68,14 @@ class _WaterSupplyStatsScreenState extends State<WaterSupplyStatsScreen> {
               : Column(
                   children: <Widget>[
                     Container(
-                      height: constraints.maxHeight * 0.4,
+                      height: constraints.maxHeight * (constraints.maxHeight < 600 ? 0.5 : 0.4),
                       child: Padding(
                         padding: const EdgeInsets.only(top: 16),
                         child: WaterSupplyChart(provider.all),
                       ),
                     ),
                     Container(
-                      height: constraints.maxHeight * 0.6,
+                      height: constraints.maxHeight * (constraints.maxHeight < 500 ? 0.5 : 0.6),
                       child: ListView.builder(
                         itemCount: provider.all.length,
                         itemBuilder: (BuildContext ctx, int index) {

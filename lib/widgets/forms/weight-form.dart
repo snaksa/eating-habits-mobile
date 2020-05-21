@@ -1,8 +1,8 @@
-import 'package:eating_habits_mobile/widgets/screens/auth.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../screens/auth.dart';
 import '../../exceptions/http_exception.dart';
 import '../../models/weight.dart';
 import '../../providers/weight-provider.dart';
@@ -89,7 +89,7 @@ class _WeightFormState extends State<WeightForm> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.save),
+            icon: Icon(Icons.save, color: Colors.white,),
             onPressed: addRecord,
           ),
         ],

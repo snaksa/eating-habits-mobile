@@ -25,10 +25,6 @@ class Auth with ChangeNotifier {
     return null;
   }
 
-  // Future<void> signup(String email, String password) async {
-  //   return _authenticate(email, password, 'signupNewUser');
-  // }
-
   Future<void> login(String email, String password) async {
     final url = 'http://10.0.2.2:8080/users/login';
     try {
@@ -65,6 +61,54 @@ class Auth with ChangeNotifier {
           'expiryDate': _expiryDate.toIso8601String(),
         },
       );
+      prefs.setString('userData', userData);
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  Future<void> register(
+      String email, String password, String confirmPassword) async {
+    final url = 'http://10.0.2.2:8080/users';
+    try {
+      final response = await http.post(url,
+          body: json.encode(
+            {
+              'username': email,
+              'password': password,
+              'confirmPassword': confirmPassword,
+            },
+          ));
+
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      if (responseData['error'] != null) {
+        throw HttpException(responseData['error']['message']);
+      }
+
+      var data = responseData['data'];
+
+      _token = data['token'];
+
+      _expiryDate = DateTime.now().add(
+        Duration(
+          seconds: data['expiresIn'],
+        ),
+      );
+
+      // logout user when token expires
+      _autoLogout();
+
+      notifyListeners();
+
+      // save in device memory
+      final prefs = await SharedPreferences.getInstance();
+      final userData = json.encode(
+        {
+          'token': _token,
+          'expiryDate': _expiryDate.toIso8601String(),
+        },
+      );
+
       prefs.setString('userData', userData);
     } catch (error) {
       throw error;

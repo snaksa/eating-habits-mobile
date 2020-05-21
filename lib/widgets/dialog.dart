@@ -17,7 +17,6 @@ class Dialog {
       )
     ];
 
-
     if (this._actions != null) {
       actions = [];
       this._actions.forEach(

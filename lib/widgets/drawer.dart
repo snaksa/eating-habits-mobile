@@ -1,9 +1,10 @@
-import 'package:eating_habits_mobile/providers/auth.dart';
-import 'package:eating_habits_mobile/widgets/screens/auth.dart';
-import 'package:eating_habits_mobile/widgets/screens/water-supply.dart';
-import 'package:eating_habits_mobile/widgets/screens/weight-balance.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
+import '../providers/auth.dart';
+import '../screens/auth.dart';
+import '../screens/water-supply/water-supply.dart';
+import '../screens/weight-balance.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -12,7 +13,10 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           AppBar(
-            title: Text('Eating Habits'),
+            title: Text(
+              'Eating Habits',
+              style: TextStyle(color: Colors.white),
+            ),
             automaticallyImplyLeading: false,
           ),
           ListTile(

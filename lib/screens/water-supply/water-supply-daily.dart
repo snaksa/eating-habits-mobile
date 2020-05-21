@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../auth.dart';
 import '../../models/water.dart';
 import '../../providers/water-povider.dart';
 import '../../exceptions/http_exception.dart';
 import '../../widgets/water-daily-stats.dart';
 import '../../widgets/dialog.dart' as dialog;
-import '../../widgets/screens/auth.dart';
 import '../../widgets/water-daily-summary.dart';
 
 class WaterSupplyDailyScreen extends StatefulWidget {
@@ -54,10 +54,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
     final waterRecords = Provider.of<WaterProvider>(context).today;
 
     final appBar = AppBar(
-      title: Text(
-        'Water Supply',
-        style: TextStyle(color: Colors.white),
-      ),
+      title: Text('Water Supply'),
     );
 
     int current = 0;
@@ -86,7 +83,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                         height: (mediaQuery.size.height -
                                 appBar.preferredSize.height -
                                 mediaQuery.padding.top) *
-                            0.2,
+                            (mediaQuery.size.height < 600 ? 0.25 : 0.2),
                         child: Column(
                           children: <Widget>[
                             WaterDailyStats(current: current, target: target),
@@ -97,7 +94,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                         height: (mediaQuery.size.height -
                                 appBar.preferredSize.height -
                                 mediaQuery.padding.top) *
-                            0.8,
+                            (mediaQuery.size.height < 600 ? 0.75 : 0.8),
                         child: ListView.builder(
                           itemCount: waterRecords.length,
                           itemBuilder: (BuildContext ctx, int index) {
@@ -122,8 +119,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                                 try {
                                   Provider.of<WaterProvider>(context,
                                           listen: false)
-                                      .removeWaterRecord(
-                                          provider.today[index]);
+                                      .removeWaterRecord(provider.today[index]);
                                 } on HttpException catch (error) {
                                   dialog.Dialog(
                                     'An Error Occurred!',

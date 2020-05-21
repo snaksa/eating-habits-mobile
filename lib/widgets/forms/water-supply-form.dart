@@ -3,10 +3,10 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
+import '../../screens/auth.dart';
 import '../../models/water.dart';
 import '../../providers/water-povider.dart';
 import '../../exceptions/http_exception.dart';
-import '../../widgets/screens/auth.dart';
 import '../../widgets/dialog.dart' as dialog;
 
 class WaterSupplyForm extends StatefulWidget {
@@ -140,7 +140,7 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
         ),
         actions: <Widget>[
           IconButton(
-            icon: Icon(Icons.save),
+            icon: Icon(Icons.save, color: Colors.white,),
             onPressed: addRecord,
           ),
         ],
