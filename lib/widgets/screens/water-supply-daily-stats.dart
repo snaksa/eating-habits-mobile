@@ -48,32 +48,47 @@ class _WaterSupplyStatsScreenState extends State<WaterSupplyStatsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (BuildContext ctx, BoxConstraints constraints) =>
-          Consumer<WaterProvider>(
-        builder: (ctx, provider, _) => this._isLoading
-            ? Container(child: CircularProgressIndicator())
-            : Column(
-                children: <Widget>[
-                  Container(
-                    padding: const EdgeInsets.all(10),
-                    height: constraints.maxHeight * 0.4,
-                    child: WaterSupplyChart(provider.all),
-                  ),
-                  Container(
-                    height: constraints.maxHeight * 0.6,
-                    child: ListView.builder(
-                      itemCount: provider.all.length,
-                      itemBuilder: (BuildContext ctx, int index) {
-                        return WaterDailySummary(
-                          provider.all[index],
-                          DateFormat.yMMMd(),
-                        );
-                      },
+    return Padding(
+      padding: const EdgeInsets.only(
+        top: 0,
+        left: 10,
+        right: 10,
+        bottom: 0,
+      ),
+      child: LayoutBuilder(
+        builder: (BuildContext ctx, BoxConstraints constraints) =>
+            Consumer<WaterProvider>(
+          builder: (ctx, provider, _) => this._isLoading
+              ? Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CircularProgressIndicator(),
+                  ],
+                )
+              : Column(
+                  children: <Widget>[
+                    Container(
+                      height: constraints.maxHeight * 0.4,
+                      child: Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: WaterSupplyChart(provider.all),
+                      ),
                     ),
-                  ),
-                ],
-              ),
+                    Container(
+                      height: constraints.maxHeight * 0.6,
+                      child: ListView.builder(
+                        itemCount: provider.all.length,
+                        itemBuilder: (BuildContext ctx, int index) {
+                          return WaterDailySummary(
+                            provider.all[index],
+                            DateFormat.yMMMd(),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+        ),
       ),
     );
   }

@@ -6,7 +6,7 @@ import '../../models/water.dart';
 
 class WaterSeries {
   final DateTime date;
-  final double amount;
+  final int amount;
 
   WaterSeries(this.date, this.amount);
 }

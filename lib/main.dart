@@ -1,5 +1,6 @@
 import 'package:eating_habits_mobile/providers/water-povider.dart';
 import 'package:eating_habits_mobile/providers/weight-provider.dart';
+import 'package:eating_habits_mobile/widgets/forms/water-supply-form.dart';
 import 'package:eating_habits_mobile/widgets/forms/weight-form.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -61,6 +62,7 @@ class MyApp extends StatelessWidget {
               WaterSupplyScreen.routeName: (ctx) => WaterSupplyScreen(),
               WeightBalanceScreen.routeName: (ctx) => WeightBalanceScreen(),
               WeightForm.routeName: (ctx) => WeightForm(),
+              WaterSupplyForm.routeName: (ctx) => WaterSupplyForm(),
               AuthScreen.routeName: (ctx) => AuthScreen(),
             }),
       ),

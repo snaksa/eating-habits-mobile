@@ -1,3 +1,4 @@
+import 'package:eating_habits_mobile/widgets/forms/water-supply-form.dart';
 import 'package:flutter/material.dart';
 
 import '../../widgets/drawer.dart';
@@ -36,6 +37,14 @@ class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
             WaterSupplyStatsScreen(),
           ],
         ),
+        floatingActionButton: FloatingActionButton(
+        tooltip: 'Add Record',
+        child: Icon(Icons.add),
+        foregroundColor: Colors.white,
+        onPressed: () {
+          Navigator.of(context).pushNamed(WaterSupplyForm.routeName);
+        },
+      ),
       ),
     );
   }

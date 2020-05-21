@@ -9,7 +9,7 @@ class WaterDailyStats extends StatelessWidget {
     @required this.target,
   }) : super(key: key);
 
-  final double current;
+  final int current;
   final int target;
 
   @override

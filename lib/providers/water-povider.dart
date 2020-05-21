@@ -50,8 +50,9 @@ class WaterProvider with ChangeNotifier {
 
   Future<void> fetchAndSetWaterRecords() async {
     DateTime now = DateTime.now();
-    DateTime date =
-        DateTime(now.year, now.month, now.day).subtract(Duration(days: 6)).toUtc();
+    DateTime date = DateTime(now.year, now.month, now.day)
+        .subtract(Duration(days: 6))
+        .toUtc();
     var formattedDate = DateFormat('y-MM-dd H:mm:ss').format(date);
 
     final responseData = await http.Request(authToken)
@@ -76,15 +77,49 @@ class WaterProvider with ChangeNotifier {
     );
 
     final extractedData = responseData['data'];
-    _today.add(Water.fromJSON(extractedData));
+    final newRecord = Water.fromJSON(extractedData);
+
+    final now = DateTime.now();
+    if (newRecord.date.year == now.year &&
+        newRecord.date.month == now.month &&
+        newRecord.date.day == now.day) {
+      _today.add(newRecord);
+    }
+
+    // update chart data
+    var chartData = _all.map((Water item) {
+      if (newRecord.date.year == item.date.year &&
+          newRecord.date.month == item.date.month &&
+          newRecord.date.day == item.date.day) {
+        return Water(amount: item.amount + newRecord.amount, date: item.date);
+      }
+
+      return item;
+    });
+
+    _all = [...chartData];
 
     notifyListeners();
   }
 
-  Future<void> removeWaterRecord(int id) async {
-    _today.removeWhere((item) => item.id == id);
+  Future<void> removeWaterRecord(Water record) async {
+    _today.removeWhere((item) => item.id == record.id);
+
+    // update chart data
+    var chartData = _all.map((Water item) {
+      if (record.date.year == item.date.year &&
+          record.date.month == item.date.month &&
+          record.date.day == item.date.day) {
+        return Water(amount: item.amount - record.amount, date: item.date);
+      }
+
+      return item;
+    });
+
+    _all = [...chartData];
+
     notifyListeners();
 
-    await http.Request(this.authToken).delete('water-supplies/$id');
+    await http.Request(this.authToken).delete('water-supplies/${record.id}');
   }
 }

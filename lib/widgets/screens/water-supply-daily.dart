@@ -60,7 +60,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
       ),
     );
 
-    double current = 0;
+    int current = 0;
     waterRecords.forEach((Water water) {
       current += water.amount;
     });
@@ -123,7 +123,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                                   Provider.of<WaterProvider>(context,
                                           listen: false)
                                       .removeWaterRecord(
-                                          provider.today[index].id);
+                                          provider.today[index]);
                                 } on HttpException catch (error) {
                                   dialog.Dialog(
                                     'An Error Occurred!',

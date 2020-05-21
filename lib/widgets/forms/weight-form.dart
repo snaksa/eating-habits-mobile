@@ -12,10 +12,10 @@ class WeightForm extends StatefulWidget {
   static final String routeName = '/weight-form';
 
   @override
-  _WeightSummaryState createState() => _WeightSummaryState();
+  _WeightFormState createState() => _WeightFormState();
 }
 
-class _WeightSummaryState extends State<WeightForm> {
+class _WeightFormState extends State<WeightForm> {
   final Map<String, dynamic> _formData = {
     'weight': '',
     'date': DateTime.now(),
@@ -94,43 +94,41 @@ class _WeightSummaryState extends State<WeightForm> {
           ),
         ],
       ),
-      body: GestureDetector(
-        child: Card(
-          elevation: 5,
-          child: Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                children: <Widget>[
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Weight'),
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value.isEmpty || double.tryParse(value) == null) {
-                        return 'Invalid weight!';
-                      }
+      body: Card(
+        elevation: 5,
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: <Widget>[
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Weight'),
+                  keyboardType: TextInputType.number,
+                  validator: (value) {
+                    if (value.isEmpty || double.tryParse(value) == null) {
+                      return 'Invalid weight!';
+                    }
 
-                      return null;
-                    },
-                    onSaved: (value) {
-                      _formData['weight'] = value;
-                    },
-                  ),
-                  TextFormField(
-                    decoration: InputDecoration(labelText: 'Date'),
-                    controller: dateController,
-                    validator: (value) {
-                      if (_formData['date'] == null) {
-                        return 'Invalid date!';
-                      }
+                    return null;
+                  },
+                  onSaved: (value) {
+                    _formData['weight'] = value;
+                  },
+                ),
+                TextFormField(
+                  decoration: InputDecoration(labelText: 'Date'),
+                  controller: dateController,
+                  validator: (value) {
+                    if (_formData['date'] == null) {
+                      return 'Invalid date!';
+                    }
 
-                      return null;
-                    },
-                    onTap: chooseDate,
-                  ),
-                ],
-              ),
+                    return null;
+                  },
+                  onTap: chooseDate,
+                ),
+              ],
             ),
           ),
         ),
