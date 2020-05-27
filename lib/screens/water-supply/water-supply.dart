@@ -23,7 +23,7 @@ class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
         appBar: AppBar(
           bottom: TabBar(
             tabs: [
-              Tab(
+              const Tab(
                   icon: Icon(
                 Icons.today,
                 color: Colors.white,
@@ -35,10 +35,10 @@ class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
               )),
             ],
           ),
-          title: Text('Water Supply'),
+          title: const Text('Water Supply'),
           actions: <Widget>[
             IconButton(
-              icon: Icon(Icons.add),
+              icon: const Icon(Icons.add),
               onPressed: () =>
                   Navigator.of(context).pushNamed(WaterSupplyForm.routeName),
             ),

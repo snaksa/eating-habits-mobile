@@ -8,8 +8,9 @@ class WeightStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(top: 8, bottom: 8),
+      padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: Card(
+        elevation: 3,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Container(
@@ -22,7 +23,7 @@ class WeightStats extends StatelessWidget {
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: <Widget>[
-                        Text(
+                        const Text(
                           'Start',
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
@@ -38,7 +39,7 @@ class WeightStats extends StatelessWidget {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: <Widget>[
-                      Text(
+                      const Text(
                         'Current',
                         style: TextStyle(
                           fontWeight: FontWeight.bold,

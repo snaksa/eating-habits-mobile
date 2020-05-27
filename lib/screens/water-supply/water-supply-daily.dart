@@ -64,6 +64,10 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
 
     int target = 5000;
 
+    final availableHeight = mediaQuery.size.height -
+        appBar.preferredSize.height -
+        mediaQuery.padding.top;
+
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -75,91 +79,99 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
         child: SingleChildScrollView(
           child: Consumer<WaterProvider>(
             builder: (ctx, provider, _) => _isLoading
-                ? Container(child: CircularProgressIndicator())
-                : Column(
-                    children: <Widget>[
-                      Container(
-                        alignment: Alignment.topCenter,
-                        height: (mediaQuery.size.height -
-                                appBar.preferredSize.height -
-                                mediaQuery.padding.top) *
-                            (mediaQuery.size.height < 600 ? 0.25 : 0.2),
-                        child: Column(
-                          children: <Widget>[
-                            WaterDailyStats(current: current, target: target),
-                          ],
-                        ),
-                      ),
-                      Container(
-                        height: (mediaQuery.size.height -
-                                appBar.preferredSize.height -
-                                mediaQuery.padding.top) *
-                            (mediaQuery.size.height < 600 ? 0.75 : 0.8),
-                        child: ListView.builder(
-                          itemCount: waterRecords.length,
-                          itemBuilder: (BuildContext ctx, int index) {
-                            return Dismissible(
-                              key: ValueKey(provider.today[index].id),
-                              background: Container(
-                                color: Theme.of(context).errorColor,
-                                child: Icon(
-                                  Icons.delete,
-                                  color: Colors.white,
-                                  size: 40,
-                                ),
-                                alignment: Alignment.centerLeft,
-                                padding: EdgeInsets.only(left: 20),
-                                margin: EdgeInsets.symmetric(
-                                  horizontal: 15,
-                                  vertical: 4,
-                                ),
-                              ),
-                              direction: DismissDirection.startToEnd,
-                              onDismissed: (_) {
-                                try {
-                                  Provider.of<WaterProvider>(context,
-                                          listen: false)
-                                      .removeWaterRecord(provider.today[index]);
-                                } on HttpException catch (error) {
-                                  dialog.Dialog(
-                                    'An Error Occurred!',
-                                    error.message,
-                                    {
-                                      'Okay': () {
-                                        Navigator.of(context).pop();
-                                        if (error.status == 403) {
-                                          Navigator.of(context).popAndPushNamed(
-                                              AuthScreen.routeName);
-                                        }
-                                      }
-                                    },
-                                  ).show(context);
-                                }
-                              },
-                              confirmDismiss: (_) {
-                                return dialog.Dialog(
-                                  'Are you sure?',
-                                  'The item will be deleted',
-                                  {
-                                    'Yes': () {
-                                      Navigator.of(ctx).pop(true);
-                                    },
-                                    'No': () {
-                                      Navigator.of(ctx).pop(false);
-                                    }
-                                  },
-                                ).show(context);
-                              },
-                              child: WaterDailySummary(
-                                waterRecords[index],
-                                DateFormat.Hm(),
-                              ),
-                            );
-                          },
-                        ),
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: CircularProgressIndicator(),
                       ),
                     ],
-                  ),
+                  )
+                : provider.today.length <= 0
+                    ? Center(
+                        child: Text('No records yet'),
+                      )
+                    : Column(
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.only(bottom: 16),
+                            alignment: Alignment.topCenter,
+                            height: availableHeight *
+                                (mediaQuery.size.height < 600 ? 0.25 : 0.2),
+                            child: WaterDailyStats(
+                                current: current, target: target),
+                          ),
+                          Container(
+                            height: availableHeight *
+                                (mediaQuery.size.height < 600 ? 0.75 : 0.8),
+                            child: ListView.builder(
+                              itemCount: waterRecords.length,
+                              itemBuilder: (BuildContext ctx, int index) {
+                                return Dismissible(
+                                  key: ValueKey(provider.today[index].id),
+                                  background: Container(
+                                    color: Theme.of(context).errorColor,
+                                    child: const Icon(
+                                      Icons.delete,
+                                      color: Colors.white,
+                                      size: 40,
+                                    ),
+                                    alignment: Alignment.centerLeft,
+                                    padding: const EdgeInsets.only(left: 20),
+                                    margin: const EdgeInsets.symmetric(
+                                      horizontal: 15,
+                                      vertical: 4,
+                                    ),
+                                  ),
+                                  direction: DismissDirection.startToEnd,
+                                  onDismissed: (_) {
+                                    try {
+                                      Provider.of<WaterProvider>(context,
+                                              listen: false)
+                                          .removeWaterRecord(
+                                              provider.today[index]);
+                                    } on HttpException catch (error) {
+                                      dialog.Dialog(
+                                        'An Error Occurred!',
+                                        error.message,
+                                        {
+                                          'Okay': () {
+                                            Navigator.of(context).pop();
+                                            if (error.status == 403) {
+                                              Navigator.of(context)
+                                                  .popAndPushNamed(
+                                                      AuthScreen.routeName);
+                                            }
+                                          }
+                                        },
+                                      ).show(context);
+                                    }
+                                  },
+                                  confirmDismiss: (_) {
+                                    return dialog.Dialog(
+                                      'Are you sure?',
+                                      'The item will be deleted',
+                                      {
+                                        'Yes': () {
+                                          Navigator.of(ctx).pop(true);
+                                        },
+                                        'No': () {
+                                          Navigator.of(ctx).pop(false);
+                                        }
+                                      },
+                                    ).show(context);
+                                  },
+                                  child: WaterDailySummary(
+                                    waterRecords[index],
+                                    DateFormat.Hm(),
+                                  ),
+                                );
+                              },
+                            ),
+                          ),
+                        ],
+                      ),
           ),
         ),
       ),

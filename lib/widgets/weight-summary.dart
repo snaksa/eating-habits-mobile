@@ -25,7 +25,7 @@ class _WeightSummaryState extends State<WeightSummary> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
+      elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(

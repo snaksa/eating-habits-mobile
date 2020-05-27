@@ -1,4 +1,3 @@
-import 'package:eating_habits_mobile/widgets/forms/water-amount-option.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -8,6 +7,7 @@ import '../../models/water.dart';
 import '../../providers/water-povider.dart';
 import '../../exceptions/http_exception.dart';
 import '../../widgets/dialog.dart' as dialog;
+import '../../widgets/forms/water-amount-option.dart';
 
 class WaterSupplyForm extends StatefulWidget {
   static final String routeName = '/water-supply-form';
@@ -17,6 +17,7 @@ class WaterSupplyForm extends StatefulWidget {
 }
 
 class _WaterSupplyFormState extends State<WaterSupplyForm> {
+  bool _isLoading = false;
   final Map<String, dynamic> _formData = {
     'amount': 0,
     'date': DateTime.now(),
@@ -39,8 +40,12 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
   void initState() {
     amountController.text = "0";
     dateController.text = DateFormat.yMMMd().format(_formData['date']);
-    timeController.text =
-        "${_formData['time'].hour}:${_formData['time'].minute}";
+
+    String minutes = _formData['time'].minute.toString();
+    if (minutes.length < 2) {
+      minutes = '0' + minutes;
+    }
+    timeController.text = "${_formData['time'].hour}:$minutes";
 
     super.initState();
   }
@@ -74,7 +79,11 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
       if (picked != null && picked != _formData['time'])
         setState(() {
           _formData['time'] = picked;
-          timeController.text = "${picked.hour}:${picked.minute}";
+          String minutes = picked.minute.toString();
+          if (minutes.length < 2) {
+            minutes = '0' + minutes;
+          }
+          timeController.text = "${picked.hour}:$minutes";
         });
     });
   }
@@ -97,6 +106,9 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
     );
 
     try {
+      setState(() {
+        _isLoading = true;
+      });
       await Provider.of<WaterProvider>(context, listen: false)
           .addWaterRecord(waterSupply);
       Navigator.pop(context);
@@ -139,14 +151,21 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.save, color: Colors.white,),
-            onPressed: addRecord,
-          ),
+          _isLoading
+              ? Container(
+                  padding: EdgeInsets.all(10),
+                  child: CircularProgressIndicator(),
+                )
+              : IconButton(
+                  icon: Icon(
+                    Icons.save,
+                    color: Colors.white,
+                  ),
+                  onPressed: addRecord,
+                ),
         ],
       ),
-      body: Card(
-        elevation: 5,
+      body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Form(
@@ -154,7 +173,7 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
             child: Column(
               children: <Widget>[
                 TextFormField(
-                  decoration: InputDecoration(labelText: 'Amount'),
+                  decoration: const InputDecoration(labelText: 'Amount'),
                   keyboardType: TextInputType.number,
                   controller: amountController,
                   validator: (value) {

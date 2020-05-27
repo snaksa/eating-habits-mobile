@@ -17,6 +17,7 @@ class WaterDailyStats extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Card(
+        elevation: 3,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
@@ -27,7 +28,7 @@ class WaterDailyStats extends StatelessWidget {
                   fontWeight: FontWeight.bold,
                 ),
               ),
-              SizedBox(
+              const SizedBox(
                 height: 14,
               ),
               LinearPercentIndicator(

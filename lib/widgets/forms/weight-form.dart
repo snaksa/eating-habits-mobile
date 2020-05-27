@@ -16,6 +16,7 @@ class WeightForm extends StatefulWidget {
 }
 
 class _WeightFormState extends State<WeightForm> {
+  bool _isLoading = false;
   final Map<String, dynamic> _formData = {
     'weight': '',
     'date': DateTime.now(),
@@ -60,6 +61,9 @@ class _WeightFormState extends State<WeightForm> {
     );
 
     try {
+      setState(() {
+        _isLoading = true;
+      });
       await Provider.of<WeightProvider>(context, listen: false)
           .addWeightRecord(weight);
       Navigator.pop(context);
@@ -88,48 +92,53 @@ class _WeightFormState extends State<WeightForm> {
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.save, color: Colors.white,),
-            onPressed: addRecord,
-          ),
+          _isLoading
+              ? Container(
+                  padding: EdgeInsets.all(10),
+                  child: CircularProgressIndicator(),
+                )
+              : IconButton(
+                  icon: Icon(
+                    Icons.save,
+                    color: Colors.white,
+                  ),
+                  onPressed: addRecord,
+                ),
         ],
       ),
-      body: Card(
-        elevation: 5,
-        child: Padding(
-          padding: const EdgeInsets.all(20.0),
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Weight'),
-                  keyboardType: TextInputType.number,
-                  validator: (value) {
-                    if (value.isEmpty || double.tryParse(value) == null) {
-                      return 'Invalid weight!';
-                    }
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: _formKey,
+          child: Column(
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Weight'),
+                keyboardType: TextInputType.number,
+                validator: (value) {
+                  if (value.isEmpty || double.tryParse(value) == null) {
+                    return 'Invalid weight!';
+                  }
 
-                    return null;
-                  },
-                  onSaved: (value) {
-                    _formData['weight'] = value;
-                  },
-                ),
-                TextFormField(
-                  decoration: InputDecoration(labelText: 'Date'),
-                  controller: dateController,
-                  validator: (value) {
-                    if (_formData['date'] == null) {
-                      return 'Invalid date!';
-                    }
+                  return null;
+                },
+                onSaved: (value) {
+                  _formData['weight'] = value;
+                },
+              ),
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Date'),
+                controller: dateController,
+                validator: (value) {
+                  if (_formData['date'] == null) {
+                    return 'Invalid date!';
+                  }
 
-                    return null;
-                  },
-                  onTap: chooseDate,
-                ),
-              ],
-            ),
+                  return null;
+                },
+                onTap: chooseDate,
+              ),
+            ],
           ),
         ),
       ),

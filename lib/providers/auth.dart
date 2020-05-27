@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
-import 'package:http/http.dart' as http;
+import '../http/request.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../exceptions/http_exception.dart';
@@ -26,14 +26,16 @@ class Auth with ChangeNotifier {
   }
 
   Future<void> login(String email, String password) async {
-    final url = 'http://10.0.2.2:8080/users/login';
+    final url = 'users/login';
     try {
-      final response = await http.post(url,
-          body: json.encode(
-            {'username': email, 'password': password},
-          ));
+      final responseData = await http.Request(null).post(
+        url,
+        {
+          'username': email,
+          'password': password,
+        },
+      );
 
-      final Map<String, dynamic> responseData = json.decode(response.body);
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }
@@ -63,24 +65,24 @@ class Auth with ChangeNotifier {
       );
       prefs.setString('userData', userData);
     } catch (error) {
+      print(error);
       throw error;
     }
   }
 
   Future<void> register(
       String email, String password, String confirmPassword) async {
-    final url = 'http://10.0.2.2:8080/users';
+    final url = 'users';
     try {
-      final response = await http.post(url,
-          body: json.encode(
-            {
-              'username': email,
-              'password': password,
-              'confirmPassword': confirmPassword,
-            },
-          ));
+      final responseData = await http.Request(null).post(
+        url,
+        {
+          'username': email,
+          'password': password,
+          'confirmPassword': confirmPassword,
+        },
+      );
 
-      final Map<String, dynamic> responseData = json.decode(response.body);
       if (responseData['error'] != null) {
         throw HttpException(responseData['error']['message']);
       }

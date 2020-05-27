@@ -1,7 +1,7 @@
-import 'package:eating_habits_mobile/http/request.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
+import '../http/request.dart' as http;
 import '../models/water.dart';
 
 class WaterProvider with ChangeNotifier {
@@ -31,6 +31,10 @@ class WaterProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetTodayWaterRecords() async {
+    if (_today.length > 0) {
+      return;
+    }
+
     DateTime now = new DateTime.now();
     DateTime date = new DateTime(now.year, now.month, now.day).toUtc();
     var formattedDate = DateFormat('y-MM-dd H:mm:ss').format(date);
@@ -49,6 +53,10 @@ class WaterProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetWaterRecords() async {
+    if (_all.length > 0) {
+      return;
+    }
+
     DateTime now = DateTime.now();
     DateTime date = DateTime(now.year, now.month, now.day)
         .subtract(Duration(days: 6))
@@ -105,18 +113,22 @@ class WaterProvider with ChangeNotifier {
   Future<void> removeWaterRecord(Water record) async {
     _today.removeWhere((item) => item.id == record.id);
 
-    // update chart data
-    var chartData = _all.map((Water item) {
-      if (record.date.year == item.date.year &&
-          record.date.month == item.date.month &&
-          record.date.day == item.date.day) {
-        return Water(amount: item.amount - record.amount, date: item.date);
-      }
+    if (_today.length == 0) {
+      _all = [];
+    } else {
+      // update chart data
+      var chartData = _all.map((Water item) {
+        if (record.date.year == item.date.year &&
+            record.date.month == item.date.month &&
+            record.date.day == item.date.day) {
+          return Water(amount: item.amount - record.amount, date: item.date);
+        }
 
-      return item;
-    });
+        return item;
+      });
 
-    _all = [...chartData];
+      _all = [...chartData];
+    }
 
     notifyListeners();
 

@@ -1,17 +1,21 @@
-import 'package:eating_habits_mobile/providers/water-povider.dart';
-import 'package:eating_habits_mobile/providers/weight-provider.dart';
-import 'package:eating_habits_mobile/screens/register.dart';
-import 'package:eating_habits_mobile/widgets/forms/water-supply-form.dart';
-import 'package:eating_habits_mobile/widgets/forms/weight-form.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
 
-import 'providers/auth.dart';
+import './providers/auth.dart';
+import './providers/water-povider.dart';
+import './providers/weight-provider.dart';
+import './widgets/forms/water-supply-form.dart';
+import './widgets/forms/weight-form.dart';
 import './screens/water-supply/water-supply.dart';
 import './screens/weight-balance.dart';
 import './screens/auth.dart';
+import './screens/register.dart';
 
-void main() => runApp(MyApp());
+Future main() async {
+  await DotEnv().load('.env');
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   @override
@@ -24,14 +28,14 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<Auth, WeightProvider>(
           update: (ctx, auth, previous) => WeightProvider(
             auth.token,
-            previous == null ? [] : previous.items,
+            [],
           ),
         ),
         ChangeNotifierProxyProvider<Auth, WaterProvider>(
           update: (ctx, auth, previous) => WaterProvider(
             auth.token,
-            previous == null ? [] : previous.today,
-            previous == null ? [] : previous.all,
+            [],
+            [],
           ),
         ),
       ],
@@ -41,9 +45,9 @@ class MyApp extends StatelessWidget {
             theme: ThemeData(
               appBarTheme: AppBarTheme(
                 iconTheme: IconThemeData(
-                  color: Colors.white, //change your color here
+                  color: Colors.white,
                 ),
-                textTheme: TextTheme(
+                textTheme: const  TextTheme(
                   headline6: TextStyle(
                     fontSize: 20,
                     color: Colors.white,
@@ -63,11 +67,8 @@ class MyApp extends StatelessWidget {
                 : FutureBuilder(
                     future: auth.tryAutoLogin(),
                     builder: (ctx, authResultSnapshot) =>
-                        authResultSnapshot.connectionState ==
-                                ConnectionState.waiting
-                            ? Container(
-                                child: Text('Loading...'),
-                              )
+                        authResultSnapshot.connectionState == ConnectionState.waiting
+                            ? Scaffold(body: Container(child: CircularProgressIndicator()))
                             : AuthScreen(),
                   ),
             routes: {

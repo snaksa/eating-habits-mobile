@@ -1,4 +1,4 @@
-package com.example.eating_habits_mobile
+package com.sinan_shaban.eating_habits_mobile
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

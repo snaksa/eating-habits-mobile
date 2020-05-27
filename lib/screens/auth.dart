@@ -16,7 +16,9 @@ class AuthScreen extends StatefulWidget {
 }
 
 class _AuthScreenState extends State<AuthScreen> {
+  bool _isLoading = false;
   final _formKey = GlobalKey<FormState>();
+  var _passwordFieldFocus = FocusNode();
 
   Map<String, String> _authData = {
     'email': '',
@@ -34,6 +36,9 @@ class _AuthScreenState extends State<AuthScreen> {
     _formKey.currentState.save();
 
     try {
+      setState(() {
+        _isLoading = true;
+      });
       await Provider.of<Auth>(context, listen: false).login(
         _authData['email'],
         _authData['password'],
@@ -41,8 +46,14 @@ class _AuthScreenState extends State<AuthScreen> {
 
       Navigator.of(context).pushReplacementNamed(WaterSupplyScreen.routeName);
     } on HttpException catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
       _showErrorDialog(error.message);
     } catch (error) {
+      setState(() {
+        _isLoading = false;
+      });
       const errorMessage =
           'Could not authenticate you. Please try again later.';
       _showErrorDialog(errorMessage);
@@ -101,8 +112,9 @@ class _AuthScreenState extends State<AuthScreen> {
                             child: Column(
                               children: <Widget>[
                                 TextFormField(
+                                  textInputAction: TextInputAction.next,
                                   decoration:
-                                      InputDecoration(labelText: 'Email'),
+                                      const InputDecoration(labelText: 'Email'),
                                   keyboardType: TextInputType.emailAddress,
                                   validator: (value) {
                                     if (value.isEmpty || !value.contains('@')) {
@@ -111,30 +123,38 @@ class _AuthScreenState extends State<AuthScreen> {
 
                                     return null;
                                   },
+                                  onFieldSubmitted: (term) {
+                                    FocusScope.of(context)
+                                        .requestFocus(_passwordFieldFocus);
+                                  },
                                   onSaved: (value) {
                                     _authData['email'] = value;
                                   },
                                 ),
                                 TextFormField(
-                                  decoration:
-                                      InputDecoration(labelText: 'Password'),
+                                  textInputAction: TextInputAction.done,
+                                  focusNode: _passwordFieldFocus,
+                                  decoration: const InputDecoration(
+                                      labelText: 'Password'),
                                   obscureText: true,
                                   onSaved: (value) {
                                     _authData['password'] = value;
                                   },
                                 ),
-                                SizedBox(
+                                const SizedBox(
                                   height: 10,
                                 ),
-                                RaisedButton(
-                                  onPressed: _submit,
-                                  child: Text(
-                                    'Login',
-                                    style: TextStyle(color: Colors.white),
-                                  ),
-                                  color: Colors.cyan,
-                                ),
-                                SizedBox(
+                                _isLoading
+                                    ? CircularProgressIndicator()
+                                    : RaisedButton(
+                                        onPressed: _submit,
+                                        child: Text(
+                                          'Login',
+                                          style: TextStyle(color: Colors.white),
+                                        ),
+                                        color: Colors.cyan,
+                                      ),
+                                const SizedBox(
                                   height: 10,
                                 ),
                                 Text("You don't have an account? "),
@@ -144,7 +164,8 @@ class _AuthScreenState extends State<AuthScreen> {
                                     style: TextStyle(color: Colors.lightBlue),
                                   ),
                                   onTap: () {
-                                    Navigator.of(context).pushReplacementNamed(RegisterScreen.routeName);
+                                    Navigator.of(context).pushReplacementNamed(
+                                        RegisterScreen.routeName);
                                   },
                                 ),
                               ],

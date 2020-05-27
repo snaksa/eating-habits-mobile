@@ -21,6 +21,10 @@ class WeightProvider with ChangeNotifier {
   }
 
   Future<void> fetchAndSetWeightRecords() async {
+    if(_items.length > 0) {
+      return;
+    }
+
     final responseData = await http.Request(authToken).fetch('weights');
 
     final extractedData = responseData['data'];

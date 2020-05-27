@@ -58,7 +58,7 @@ class WeightChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(bottom: 16),
       child: Card(
-        elevation: 4,
+        elevation: 3,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: new charts.TimeSeriesChart(

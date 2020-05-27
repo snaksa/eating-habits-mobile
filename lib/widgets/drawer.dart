@@ -21,23 +21,23 @@ class AppDrawer extends StatelessWidget {
           ),
           ListTile(
             leading: Icon(Icons.local_drink),
-            title: Text('Water Supply'),
+            title: const Text('Water Supply'),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(WaterSupplyScreen.routeName);
             },
           ),
           ListTile(
-            leading: Icon(Icons.show_chart),
-            title: Text('Weight Balance'),
+            leading: const Icon(Icons.show_chart),
+            title: const Text('Weight Balance'),
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(WeightBalanceScreen.routeName);
             },
           ),
           ListTile(
-            leading: Icon(Icons.exit_to_app),
-            title: Text('Log Out'),
+            leading: const Icon(Icons.exit_to_app),
+            title: const Text('Log Out'),
             onTap: () {
               Provider.of<Auth>(context, listen: false).logout().then((_) =>
                   Navigator.of(context)

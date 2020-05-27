@@ -17,7 +17,7 @@ class _WaterDailySummaryState extends State<WaterDailySummary> {
   @override
   Widget build(BuildContext context) {
     return Card(
-      elevation: 5,
+      elevation: 3,
       child: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
@@ -26,8 +26,10 @@ class _WaterDailySummaryState extends State<WaterDailySummary> {
             Expanded(
               child: Row(
                 children: <Widget>[
-                  Icon(Icons.access_time),
-                  SizedBox(width: 10,),
+                  const Icon(Icons.access_time),
+                  const SizedBox(
+                    width: 10,
+                  ),
                   Text(
                     widget._formatter.format(widget._water.date.toLocal()),
                     textAlign: TextAlign.center,

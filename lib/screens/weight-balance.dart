@@ -82,98 +82,111 @@ class _WeightBalanceScreenState extends State<WeightBalanceScreen> {
           child: SingleChildScrollView(
             child: Consumer<WeightProvider>(
               builder: (ctx, provider, _) => _isLoading
-                  ? Container(child: CircularProgressIndicator())
-                  : Column(
-                      children: <Widget>[
-                        Container(
-                          height: availableHeight * 0.15,
-                          child: provider.items.length > 0
-                              ? WeightStats(
-                                  provider.items.first.weight,
-                                  provider.items.last.weight,
-                                )
-                              : WeightStats(0, 0),
-                        ),
-                        Container(
-                          height: availableHeight * 0.3,
-                          child: WeightChart(provider.items),
-                        ),
-                        Container(
-                          height: availableHeight * 0.5,
-                          child: ListView.builder(
-                            itemCount: provider.items.length,
-                            itemBuilder: (BuildContext ctx, int index) {
-                              return Dismissible(
-                                key: ValueKey(provider.items[index].id),
-                                background: Container(
-                                  color: Theme.of(context).errorColor,
-                                  child: Icon(
-                                    Icons.delete,
-                                    color: Colors.white,
-                                    size: 40,
-                                  ),
-                                  alignment: Alignment.centerLeft,
-                                  padding: EdgeInsets.only(left: 20),
-                                  margin: EdgeInsets.symmetric(
-                                    horizontal: 15,
-                                    vertical: 4,
-                                  ),
-                                ),
-                                direction: DismissDirection.startToEnd,
-                                onDismissed: (_) {
-                                  try {
-                                    Provider.of<WeightProvider>(context,
-                                            listen: false)
-                                        .removeWeightRecord(
-                                            provider.items[index].id);
-                                  } on HttpException catch (error) {
-                                    dialog.Dialog(
-                                      'An Error Occurred!',
-                                      error.message,
-                                      {
-                                        'Okay': () {
-                                          Navigator.of(context).pop();
-                                          if (error.status == 403) {
-                                            Navigator.of(context)
-                                                .popAndPushNamed(
-                                                    AuthScreen.routeName);
-                                          }
-                                        }
-                                      },
-                                    ).show(context);
-                                  }
-                                },
-                                confirmDismiss: (_) {
-                                  return dialog.Dialog(
-                                    'Are you sure?',
-                                    'The item will be deleted',
-                                    {
-                                      'Yes': () {
-                                        Navigator.of(ctx).pop(true);
-                                      },
-                                      'No': () {
-                                        Navigator.of(ctx).pop(false);
-                                      }
-                                    },
-                                  ).show(context);
-                                },
-                                child: WeightSummary(
-                                  provider.items[index],
-                                  deleteWeightRecord: () {},
-                                  diff: num.parse(
-                                    (index < provider.items.length - 1
-                                            ? provider.items[index + 1].weight -
-                                                provider.items[index].weight
-                                            : 0)
-                                        .toStringAsFixed(3),
-                                  ),
-                                ),
-                              );
-                            },
-                          ),
+                  ? Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: CircularProgressIndicator(),
                         ),
                       ],
-                    ),
+                    )
+                  : provider.items.length <= 0
+                      ? Center(
+                          child: Text('No records yet'),
+                        )
+                      : Column(
+                          children: <Widget>[
+                            Container(
+                              height: availableHeight * 0.15,
+                              child: provider.items.length > 0
+                                  ? WeightStats(
+                                      provider.items.first.weight,
+                                      provider.items.last.weight,
+                                    )
+                                  : WeightStats(0, 0),
+                            ),
+                            Container(
+                              height: availableHeight * 0.3,
+                              child: WeightChart(provider.items),
+                            ),
+                            Container(
+                              height: availableHeight * 0.5,
+                              child: ListView.builder(
+                                itemCount: provider.items.length,
+                                itemBuilder: (BuildContext ctx, int index) {
+                                  return Dismissible(
+                                    key: ValueKey(provider.items[index].id),
+                                    background: Container(
+                                      color: Theme.of(context).errorColor,
+                                      child: Icon(
+                                        Icons.delete,
+                                        color: Colors.white,
+                                        size: 40,
+                                      ),
+                                      alignment: Alignment.centerLeft,
+                                      padding: EdgeInsets.only(left: 20),
+                                      margin: EdgeInsets.symmetric(
+                                        horizontal: 15,
+                                        vertical: 4,
+                                      ),
+                                    ),
+                                    direction: DismissDirection.startToEnd,
+                                    onDismissed: (_) {
+                                      try {
+                                        Provider.of<WeightProvider>(context,
+                                                listen: false)
+                                            .removeWeightRecord(
+                                                provider.items[index].id);
+                                      } on HttpException catch (error) {
+                                        dialog.Dialog(
+                                          'An Error Occurred!',
+                                          error.message,
+                                          {
+                                            'Okay': () {
+                                              Navigator.of(context).pop();
+                                              if (error.status == 403) {
+                                                Navigator.of(context)
+                                                    .popAndPushNamed(
+                                                        AuthScreen.routeName);
+                                              }
+                                            }
+                                          },
+                                        ).show(context);
+                                      }
+                                    },
+                                    confirmDismiss: (_) {
+                                      return dialog.Dialog(
+                                        'Are you sure?',
+                                        'The item will be deleted',
+                                        {
+                                          'Yes': () {
+                                            Navigator.of(ctx).pop(true);
+                                          },
+                                          'No': () {
+                                            Navigator.of(ctx).pop(false);
+                                          }
+                                        },
+                                      ).show(context);
+                                    },
+                                    child: WeightSummary(
+                                      provider.items[index],
+                                      deleteWeightRecord: () {},
+                                      diff: num.parse(
+                                        (index < provider.items.length - 1
+                                                ? provider.items[index + 1]
+                                                        .weight -
+                                                    provider.items[index].weight
+                                                : 0)
+                                            .toStringAsFixed(3),
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
             ),
           ),
         ),

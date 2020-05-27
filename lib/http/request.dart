@@ -1,18 +1,22 @@
 import 'dart:convert';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:http/http.dart' as http;
 
 import '../exceptions/http_exception.dart';
 
 class Request {
-  final String baseUrl = 'http://10.0.2.2:8080/';
+  String baseUrl;
   final String _authToken;
 
-  Request(this._authToken);
+  Request(this._authToken) {
+    this.baseUrl = DotEnv().env['API_URL'];
+  }
 
   Future<Map<String, dynamic>> fetch(String resource) async {
     var response = await http.get(
       '${this.baseUrl}$resource',
-      headers: this._authToken != null ? {'Authorization': this._authToken} : {},
+      headers:
+          this._authToken != null ? {'Authorization': this._authToken} : {},
     );
 
     final data = json.decode(response.body) as Map<String, dynamic>;
@@ -25,7 +29,8 @@ class Request {
       String resource, Map<String, dynamic> body) async {
     var response = await http.post(
       '${this.baseUrl}$resource',
-      headers: this._authToken != null ? {'Authorization': this._authToken} : {},
+      headers:
+          this._authToken != null ? {'Authorization': this._authToken} : {},
       body: json.encode(body),
     );
 
@@ -45,11 +50,11 @@ class Request {
     }
   }
 
-
   Future<Map<String, dynamic>> delete(String resource) async {
     var response = await http.delete(
       '${this.baseUrl}$resource',
-      headers: this._authToken != null ? {'Authorization': this._authToken} : {},
+      headers:
+          this._authToken != null ? {'Authorization': this._authToken} : {},
     );
 
     final data = json.decode(response.body) as Map<String, dynamic>;
@@ -57,5 +62,4 @@ class Request {
 
     return data;
   }
-
 }

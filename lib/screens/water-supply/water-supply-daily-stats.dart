@@ -65,29 +65,35 @@ class _WaterSupplyStatsScreenState extends State<WaterSupplyStatsScreen> {
                     CircularProgressIndicator(),
                   ],
                 )
-              : Column(
-                  children: <Widget>[
-                    Container(
-                      height: constraints.maxHeight * (constraints.maxHeight < 600 ? 0.5 : 0.4),
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 16),
-                        child: WaterSupplyChart(provider.all),
-                      ),
+              : provider.all.length <= 0
+                  ? Center(
+                      child: Text('No records yet'),
+                    )
+                  : Column(
+                      children: <Widget>[
+                        Container(
+                          height: constraints.maxHeight *
+                              (constraints.maxHeight < 600 ? 0.5 : 0.4),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 16),
+                            child: WaterSupplyChart(provider.all),
+                          ),
+                        ),
+                        Container(
+                          height: constraints.maxHeight *
+                              (constraints.maxHeight < 500 ? 0.5 : 0.6),
+                          child: ListView.builder(
+                            itemCount: provider.all.length,
+                            itemBuilder: (BuildContext ctx, int index) {
+                              return WaterDailySummary(
+                                provider.all[index],
+                                DateFormat.yMMMd(),
+                              );
+                            },
+                          ),
+                        ),
+                      ],
                     ),
-                    Container(
-                      height: constraints.maxHeight * (constraints.maxHeight < 500 ? 0.5 : 0.6),
-                      child: ListView.builder(
-                        itemCount: provider.all.length,
-                        itemBuilder: (BuildContext ctx, int index) {
-                          return WaterDailySummary(
-                            provider.all[index],
-                            DateFormat.yMMMd(),
-                          );
-                        },
-                      ),
-                    ),
-                  ],
-                ),
         ),
       ),
     );
