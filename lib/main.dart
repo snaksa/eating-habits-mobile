@@ -1,3 +1,4 @@
+import 'package:eating_habits_mobile/screens/water-supply/water-supply-daily.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:provider/provider.dart';
@@ -73,6 +74,7 @@ class MyApp extends StatelessWidget {
                   ),
             routes: {
               WaterSupplyScreen.routeName: (ctx) => WaterSupplyScreen(),
+              WaterSupplyDailyScreen.routeName: (ctx) => WaterSupplyDailyScreen(),
               WeightBalanceScreen.routeName: (ctx) => WeightBalanceScreen(),
               WeightForm.routeName: (ctx) => WeightForm(),
               WaterSupplyForm.routeName: (ctx) => WaterSupplyForm(),

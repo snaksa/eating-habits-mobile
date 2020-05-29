@@ -3,14 +3,16 @@ import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
 class WaterDailyStats extends StatelessWidget {
+  final int current;
+  final int target;
+  final String label;
+
   const WaterDailyStats({
     Key key,
     @required this.current,
     @required this.target,
+    @required this.label,
   }) : super(key: key);
-
-  final int current;
-  final int target;
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class WaterDailyStats extends StatelessWidget {
           child: Column(
             children: [
               Text(
-                'Today',
+                this.label,
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                 ),

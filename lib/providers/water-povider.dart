@@ -6,6 +6,7 @@ import '../models/water.dart';
 
 class WaterProvider with ChangeNotifier {
   List<Water> _today = [];
+  List<Water> _specificDate = [];
   List<Water> _all = [];
 
   final String authToken;
@@ -14,6 +15,15 @@ class WaterProvider with ChangeNotifier {
 
   List<Water> get today {
     var list = [..._today];
+    list.sort((Water a, Water b) {
+      return a.date.compareTo(b.date);
+    });
+
+    return list;
+  }
+
+  List<Water> get specificDate {
+    var list = [..._specificDate];
     list.sort((Water a, Water b) {
       return a.date.compareTo(b.date);
     });
@@ -30,13 +40,14 @@ class WaterProvider with ChangeNotifier {
     return list;
   }
 
-  Future<void> fetchAndSetTodayWaterRecords() async {
-    if (_today.length > 0) {
+  Future<void> fetchAndSetTodayWaterRecords(DateTime searchDate) async {
+    if (_today.length > 0 && searchDate == null) {
       return;
     }
 
-    DateTime now = new DateTime.now();
-    DateTime date = new DateTime(now.year, now.month, now.day).toUtc();
+    var date = DateTime.now();
+    if (searchDate != null) date = searchDate;
+    date = new DateTime(date.year, date.month, date.day).toUtc();
     var formattedDate = DateFormat('y-MM-dd H:mm:ss').format(date);
 
     final responseData = await http.Request(authToken)
@@ -48,7 +59,11 @@ class WaterProvider with ChangeNotifier {
       data.add(Water.fromJSON(item));
     });
 
-    _today = data;
+    if (searchDate == null) {
+      _today = data;
+    } else {
+      _specificDate = data;
+    }
     notifyListeners();
   }
 
@@ -112,23 +127,20 @@ class WaterProvider with ChangeNotifier {
 
   Future<void> removeWaterRecord(Water record) async {
     _today.removeWhere((item) => item.id == record.id);
+    _specificDate.removeWhere((item) => item.id == record.id);
 
-    if (_today.length == 0) {
-      _all = [];
-    } else {
-      // update chart data
-      var chartData = _all.map((Water item) {
-        if (record.date.year == item.date.year &&
-            record.date.month == item.date.month &&
-            record.date.day == item.date.day) {
-          return Water(amount: item.amount - record.amount, date: item.date);
-        }
+    // update chart data
+    var chartData = _all.map((Water item) {
+      if (record.date.year == item.date.year &&
+          record.date.month == item.date.month &&
+          record.date.day == item.date.day) {
+        return Water(amount: item.amount - record.amount, date: item.date);
+      }
 
-        return item;
-      });
+      return item;
+    });
 
-      _all = [...chartData];
-    }
+    _all = [...chartData];
 
     notifyListeners();
 

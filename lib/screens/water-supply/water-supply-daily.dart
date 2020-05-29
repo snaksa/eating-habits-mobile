@@ -11,6 +11,8 @@ import '../../widgets/dialog.dart' as dialog;
 import '../../widgets/water-daily-summary.dart';
 
 class WaterSupplyDailyScreen extends StatefulWidget {
+  static const String routeName = '/water-supply-daily';
+
   @override
   _WaterSupplyDailyScreenState createState() => _WaterSupplyDailyScreenState();
 }
@@ -25,7 +27,10 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
       setState(() {
         _isLoading = true;
       });
-      Provider.of<WaterProvider>(context).fetchAndSetTodayWaterRecords().then(
+      var date = this.getDate();
+      Provider.of<WaterProvider>(context)
+          .fetchAndSetTodayWaterRecords(date)
+          .then(
         (_) {
           setState(() {
             _isLoading = false;
@@ -48,26 +53,22 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
     super.didChangeDependencies();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  DateTime getDate() {
+    Map<String, Object> args = ModalRoute.of(context).settings.arguments;
+    if (args != null && args['date'] != null) {
+      return args['date'];
+    }
+
+    return null;
+  }
+
+  Widget content(AppBar appBar) {
     final mediaQuery = MediaQuery.of(context);
-    final waterRecords = Provider.of<WaterProvider>(context).today;
-
-    final appBar = AppBar(
-      title: Text('Water Supply'),
-    );
-
-    int current = 0;
-    waterRecords.forEach((Water water) {
-      current += water.amount;
-    });
 
     int target = 5000;
-
     final availableHeight = mediaQuery.size.height -
         appBar.preferredSize.height -
         mediaQuery.padding.top;
-
     return Center(
       child: Padding(
         padding: const EdgeInsets.only(
@@ -77,8 +78,21 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
           bottom: 0,
         ),
         child: SingleChildScrollView(
-          child: Consumer<WaterProvider>(
-            builder: (ctx, provider, _) => _isLoading
+          child: Consumer<WaterProvider>(builder: (ctx, provider, _) {
+            var waterRecords;
+            var date = this.getDate();
+            if (date != null) {
+              waterRecords = provider.specificDate;
+            } else {
+              waterRecords = provider.today;
+            }
+
+            int current = 0;
+            waterRecords.forEach((Water water) {
+              current += water.amount;
+            });
+
+            return _isLoading
                 ? Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -88,7 +102,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                       ),
                     ],
                   )
-                : provider.today.length <= 0
+                : waterRecords.length <= 0
                     ? Center(
                         child: Text('No records yet'),
                       )
@@ -100,7 +114,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                             height: availableHeight *
                                 (mediaQuery.size.height < 600 ? 0.25 : 0.2),
                             child: WaterDailyStats(
-                                current: current, target: target),
+                                current: current, target: target, label: date == null ? 'Today' : DateFormat.yMMMd().format(date)),
                           ),
                           Container(
                             height: availableHeight *
@@ -109,7 +123,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                               itemCount: waterRecords.length,
                               itemBuilder: (BuildContext ctx, int index) {
                                 return Dismissible(
-                                  key: ValueKey(provider.today[index].id),
+                                  key: ValueKey(waterRecords[index].id),
                                   background: Container(
                                     color: Theme.of(context).errorColor,
                                     child: const Icon(
@@ -130,7 +144,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                                       Provider.of<WaterProvider>(context,
                                               listen: false)
                                           .removeWaterRecord(
-                                              provider.today[index]);
+                                              waterRecords[index]);
                                     } on HttpException catch (error) {
                                       dialog.Dialog(
                                         'An Error Occurred!',
@@ -171,10 +185,25 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                             ),
                           ),
                         ],
-                      ),
-          ),
+                      );
+          }),
         ),
       ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var date = this.getDate();
+    final appBar = AppBar(
+      title: Text(date == null ? 'Water Supply' : 'History'),
+    );
+
+    return date == null
+        ? this.content(appBar)
+        : Scaffold(
+            appBar: appBar,
+            body: this.content(appBar),
+          );
   }
 }
