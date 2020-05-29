@@ -57,11 +57,12 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
       firstDate: DateTime(2019),
       lastDate: DateTime.now(),
     ).then((picked) {
-      if (picked != null && picked != _formData['date'])
+      if (picked != null && picked != _formData['date']) {
         setState(() {
           _formData['date'] = picked;
           dateController.text = DateFormat.yMMMd().format(picked);
         });
+      }
     });
   }
 
@@ -173,6 +174,7 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
             child: Column(
               children: <Widget>[
                 TextFormField(
+                  readOnly: true,
                   decoration: const InputDecoration(labelText: 'Amount'),
                   keyboardType: TextInputType.number,
                   controller: amountController,
@@ -233,6 +235,7 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          readOnly: true,
                           decoration: InputDecoration(labelText: 'Date'),
                           controller: dateController,
                           validator: (value) {
@@ -250,6 +253,7 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: TextFormField(
+                          readOnly: true,
                           decoration: InputDecoration(labelText: 'Time'),
                           controller: timeController,
                           validator: (value) {

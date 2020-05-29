@@ -127,6 +127,7 @@ class _WeightFormState extends State<WeightForm> {
                 },
               ),
               TextFormField(
+                readOnly: true,
                 decoration: InputDecoration(labelText: 'Date'),
                 controller: dateController,
                 validator: (value) {
