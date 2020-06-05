@@ -5,6 +5,7 @@ import '../providers/auth.dart';
 import '../screens/auth.dart';
 import '../screens/water-supply/water-supply.dart';
 import '../screens/weight-balance.dart';
+import '../screens/medicine/medicine.dart';
 
 class AppDrawer extends StatelessWidget {
   @override
@@ -33,6 +34,14 @@ class AppDrawer extends StatelessWidget {
             onTap: () {
               Navigator.of(context)
                   .pushReplacementNamed(WeightBalanceScreen.routeName);
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.local_hospital),
+            title: const Text('Medicines'),
+            onTap: () {
+              Navigator.of(context)
+                  .pushReplacementNamed(MedicineScreen.routeName);
             },
           ),
           ListTile(

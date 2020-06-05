@@ -40,7 +40,7 @@ class WaterProvider with ChangeNotifier {
     return list;
   }
 
-  Future<void> fetchAndSetTodayWaterRecords(DateTime searchDate) async {
+  Future<void> fetchAndSetByDateWaterRecords(DateTime searchDate) async {
     if (_today.length > 0 && searchDate == null) {
       return;
     }
@@ -78,8 +78,11 @@ class WaterProvider with ChangeNotifier {
         .toUtc();
     var formattedDate = DateFormat('y-MM-dd H:mm:ss').format(date);
 
+    var endDate = DateTime(now.year, now.month, now.day + 1).toUtc();
+    var formattedEndDate = DateFormat('y-MM-dd H:mm:ss').format(endDate);
+
     final responseData = await http.Request(authToken)
-        .fetch('water-supplies/groupByDays?startDate=$formattedDate');
+        .fetch('water-supplies/groupByDays?startDate=$formattedDate&endDate=$formattedEndDate');
     final extractedData = responseData['data'];
     final List<Water> data = [];
     extractedData.forEach((item) {

@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
 
-import './water-supply-daily.dart';
-import './water-supply-daily-stats.dart';
+import './medicine-list.dart';
 import '../../widgets/drawer.dart';
-import '../../widgets/forms/water-supply-form.dart';
+import '../../widgets/forms/medicine-form.dart';
 
-class WaterSupplyScreen extends StatefulWidget {
-  static const String routeName = '/water-supply';
+class MedicineScreen extends StatefulWidget {
+  static const String routeName = '/medicines';
 
   @override
-  _WaterSupplyScreenState createState() => _WaterSupplyScreenState();
+  _MedicineScreenState createState() => _MedicineScreenState();
 }
 
-class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
+class _MedicineScreenState extends State<MedicineScreen> {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -33,20 +32,20 @@ class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
               )),
             ],
           ),
-          title: const Text('Water Supply'),
+          title: const Text('Medicines'),
           actions: <Widget>[
             IconButton(
               icon: const Icon(Icons.add),
               onPressed: () =>
-                  Navigator.of(context).pushNamed(WaterSupplyForm.routeName),
+                  Navigator.of(context).pushNamed(MedicineForm.routeName),
             ),
           ],
         ),
         drawer: AppDrawer(),
         body: TabBarView(
           children: [
-            WaterSupplyDailyScreen(),
-            WaterSupplyStatsScreen(),
+            MedicineListScreen(),
+            MedicineListScreen(),
           ],
         ),
       ),
