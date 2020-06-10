@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import './medicine-list.dart';
+import './medicine-daily.dart';
 import '../../widgets/drawer.dart';
 import '../../widgets/forms/medicine-form.dart';
 
@@ -44,7 +45,7 @@ class _MedicineScreenState extends State<MedicineScreen> {
         drawer: AppDrawer(),
         body: TabBarView(
           children: [
-            MedicineListScreen(),
+            MedicineDailyScreen(),
             MedicineListScreen(),
           ],
         ),

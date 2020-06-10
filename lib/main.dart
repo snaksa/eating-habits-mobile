@@ -46,6 +46,7 @@ class MyApp extends StatelessWidget {
           update: (ctx, auth, previous) => MedicineProvider(
             auth.token,
             previous != null ? previous.medicines : [],
+            previous != null ? previous.schedule : [],
           ),
         ),
       ],

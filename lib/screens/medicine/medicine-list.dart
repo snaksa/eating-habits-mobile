@@ -47,12 +47,7 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(
-        top: 20,
-        left: 10,
-        right: 10,
-        bottom: 0,
-      ),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: Container(
         child: Consumer<MedicineProvider>(
           builder: (ctx, provider, _) => this._isLoading
@@ -67,7 +62,7 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
                       child: Text('No records yet'),
                     )
                   : Container(
-                    height: double.infinity,
+                      height: double.infinity,
                       child: ListView.builder(
                         itemCount: provider.medicines.length,
                         itemBuilder: (BuildContext ctx, int index) {

@@ -10,10 +10,9 @@ import '../../models/medicine-schedule.dart';
 import '../../exceptions/http_exception.dart';
 
 class MedicineFormEveryday extends StatefulWidget {
-  final List<MedicineSchedule> schedule;
   final Medicine medicine;
 
-  MedicineFormEveryday({this.schedule, this.medicine});
+  MedicineFormEveryday({this.medicine});
 
   @override
   _MedicineFormEverydayState createState() => _MedicineFormEverydayState();
@@ -96,7 +95,7 @@ class _MedicineFormEverydayState extends State<MedicineFormEveryday> {
           Wrap(
             direction: Axis.horizontal,
             children: <Widget>[
-              ...widget.schedule.map((MedicineSchedule schedule) {
+              ...widget.medicine.schedule.map((MedicineSchedule schedule) {
                 return GestureDetector(
                   onLongPressStart: (LongPressStartDetails details) {
                     final RenderBox overlay =
