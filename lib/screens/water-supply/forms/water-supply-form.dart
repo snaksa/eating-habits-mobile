@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../screens/auth.dart';
-import '../../models/water.dart';
-import '../../providers/water-povider.dart';
-import '../../exceptions/http_exception.dart';
-import '../../widgets/dialog.dart' as dialog;
-import '../../widgets/forms/water-amount-option.dart';
+import '../../../screens/auth.dart';
+import '../../../models/water.dart';
+import '../../../providers/water-povider.dart';
+import '../../../exceptions/http_exception.dart';
+import '../../../widgets/dialog.dart' as dialog;
+import './water-amount-option.dart';
 
 class WaterSupplyForm extends StatefulWidget {
   static final String routeName = '/water-supply-form';
@@ -147,18 +147,18 @@ class _WaterSupplyFormState extends State<WaterSupplyForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Add Record',
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
           _isLoading
               ? Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: CircularProgressIndicator(),
                 )
               : IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.save,
                     color: Colors.white,
                   ),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import './water-supply-daily.dart';
 import './water-supply-daily-stats.dart';
 import '../../widgets/drawer.dart';
-import '../../widgets/forms/water-supply-form.dart';
+import './forms/water-supply-form.dart';
 
 class WaterSupplyScreen extends StatefulWidget {
   static const String routeName = '/water-supply';
@@ -22,15 +22,17 @@ class _WaterSupplyScreenState extends State<WaterSupplyScreen> {
           bottom: TabBar(
             tabs: [
               const Tab(
-                  icon: Icon(
-                Icons.today,
-                color: Colors.white,
-              )),
-              Tab(
-                  icon: Icon(
-                Icons.insert_chart,
-                color: Colors.white,
-              )),
+                icon: Icon(
+                  Icons.today,
+                  color: Colors.white,
+                ),
+              ),
+              const Tab(
+                icon: Icon(
+                  Icons.insert_chart,
+                  color: Colors.white,
+                ),
+              ),
             ],
           ),
           title: const Text('Water Supply'),

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import './medicine-list.dart';
 import './medicine-daily.dart';
 import '../../widgets/drawer.dart';
-import '../../widgets/forms/medicine-form.dart';
+import './forms/medicine-form.dart';
 
 class MedicineScreen extends StatefulWidget {
   static const String routeName = '/medicines';
@@ -22,15 +22,17 @@ class _MedicineScreenState extends State<MedicineScreen> {
           bottom: TabBar(
             tabs: [
               const Tab(
-                  icon: Icon(
-                Icons.today,
-                color: Colors.white,
-              )),
+                icon: const Icon(
+                  Icons.today,
+                  color: Colors.white,
+                ),
+              ),
               Tab(
-                  icon: Icon(
-                Icons.insert_chart,
-                color: Colors.white,
-              )),
+                icon: const Icon(
+                  Icons.insert_chart,
+                  color: Colors.white,
+                ),
+              ),
             ],
           ),
           title: const Text('Medicines'),

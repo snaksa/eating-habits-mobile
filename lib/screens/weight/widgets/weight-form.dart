@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../screens/auth.dart';
-import '../../exceptions/http_exception.dart';
-import '../../models/weight.dart';
-import '../../providers/weight-provider.dart';
-import '../../widgets/dialog.dart' as dialog;
+import '../../auth.dart';
+import '../../../exceptions/http_exception.dart';
+import '../../../models/weight.dart';
+import '../../../providers/weight-provider.dart';
+import '../../../widgets/dialog.dart' as dialog;
 
 class WeightForm extends StatefulWidget {
   static final String routeName = '/weight-form';
@@ -87,18 +87,18 @@ class _WeightFormState extends State<WeightForm> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Add Record',
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
           _isLoading
               ? Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: CircularProgressIndicator(),
                 )
               : IconButton(
-                  icon: Icon(
+                  icon: const Icon(
                     Icons.save,
                     color: Colors.white,
                   ),

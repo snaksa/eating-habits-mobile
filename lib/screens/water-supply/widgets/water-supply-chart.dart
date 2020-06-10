@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 
-import '../../models/water.dart';
+import '../../../models/water.dart';
 
 class WaterSeries {
   final DateTime date;
@@ -43,12 +43,11 @@ class WaterSupplyChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(bottom: 16),
       child: Card(
-        elevation: 3,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: Column(
             children: <Widget>[
-              Text(
+              const Text(
                 'Last 7 days',
                 style: TextStyle(
                   fontWeight: FontWeight.bold,

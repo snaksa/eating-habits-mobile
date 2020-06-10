@@ -65,7 +65,7 @@ class _MedicineDailyScreenState extends State<MedicineDailyScreen> {
                     )
                   : provider.schedule.length <= 0
                       ? Center(
-                          child: Text('No medicine intake today'),
+                          child: const Text('No medicine intake today'),
                         )
                       : Container(
                           height: double.infinity,
@@ -81,14 +81,12 @@ class _MedicineDailyScreenState extends State<MedicineDailyScreen> {
                                         child: Container(
                                           child: Row(
                                             children: [
-                                              Image.network(
-                                                'https://images-na.ssl-images-amazon.com/images/I/51%2Bsvqfjd-L._SL1000_.jpg',
-                                                width: 50,
-                                                fit: BoxFit.cover,
-                                              ),
                                               Text(
                                                 provider.schedule[index]
                                                     .medicine.name,
+                                                style: TextStyle(
+                                                  fontWeight: FontWeight.bold,
+                                                ),
                                               ),
                                             ],
                                           ),
@@ -98,11 +96,11 @@ class _MedicineDailyScreenState extends State<MedicineDailyScreen> {
                                         children: <Widget>[
                                           Row(
                                             children: <Widget>[
-                                              Icon(
+                                              const Icon(
                                                 Icons.watch_later,
                                                 size: 16,
                                               ),
-                                              SizedBox(width: 4),
+                                              const SizedBox(width: 4),
                                               Text(
                                                 DateFormat.Hm().format(provider
                                                     .schedule[index]
@@ -116,7 +114,7 @@ class _MedicineDailyScreenState extends State<MedicineDailyScreen> {
                                                     null
                                                 ? Colors.green
                                                 : Colors.grey,
-                                            child: Icon(
+                                            child: const Icon(
                                               Icons.check,
                                               color: Colors.white,
                                             ),

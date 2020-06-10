@@ -3,7 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../auth.dart';
 import '../../providers/medicine-provider.dart';
-import '../../widgets/medicine-summary.dart';
+import './widgets/medicine-summary.dart';
 import '../../widgets/dialog.dart' as dialog;
 
 class MedicineListScreen extends StatefulWidget {
@@ -59,7 +59,7 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
                 )
               : provider.medicines.length <= 0
                   ? Center(
-                      child: Text('No records yet'),
+                      child: const Text('No records yet'),
                     )
                   : Container(
                       height: double.infinity,

@@ -1,5 +1,5 @@
 import 'package:charts_flutter/flutter.dart' as charts;
-import '../../models/weight.dart';
+import '../../../models/weight.dart';
 import 'package:flutter/material.dart';
 
 class WeightSeries {
@@ -58,7 +58,6 @@ class WeightChart extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(bottom: 16),
       child: Card(
-        elevation: 3,
         child: Padding(
           padding: const EdgeInsets.all(8),
           child: new charts.TimeSeriesChart(

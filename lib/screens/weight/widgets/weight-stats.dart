@@ -10,7 +10,6 @@ class WeightStats extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.only(top: 8, bottom: 8),
       child: Card(
-        elevation: 3,
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
           child: Container(

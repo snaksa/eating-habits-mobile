@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../screens/auth.dart';
-import '../../providers/medicine-provider.dart';
-import '../../models/medicine.dart';
-import '../../widgets/dialog.dart' as dialog;
-import '../../models/medicine-schedule.dart';
-import '../../exceptions/http_exception.dart';
+import '../../auth.dart';
+import '../../../providers/medicine-provider.dart';
+import '../../../exceptions/http_exception.dart';
+import '../../../models/medicine.dart';
+import '../../../models/medicine-schedule.dart';
+import '../../../widgets/dialog.dart' as dialog;
 
 class MedicineFormEveryday extends StatefulWidget {
   final Medicine medicine;
@@ -88,7 +88,7 @@ class _MedicineFormEverydayState extends State<MedicineFormEveryday> {
       padding: const EdgeInsets.only(top: 16),
       child: Column(
         children: <Widget>[
-          Text(
+          const Text(
             'Schedule',
             style: TextStyle(fontWeight: FontWeight.bold),
           ),
@@ -110,7 +110,7 @@ class _MedicineFormEverydayState extends State<MedicineFormEveryday> {
                         PopupMenuItem(
                           value: 0,
                           child: Row(
-                            children: <Widget>[
+                            children: const <Widget>[
                               Icon(Icons.delete),
                               Text("Delete"),
                             ],
@@ -118,17 +118,21 @@ class _MedicineFormEverydayState extends State<MedicineFormEveryday> {
                         )
                       ],
                       context: context,
-                    ).then((value) => removeRecord(schedule));
+                    ).then((value) {
+                      if (value == 0) {
+                        removeRecord(schedule);
+                      }
+                    });
                   },
                   child: Container(
-                    margin: EdgeInsets.only(right: 8, top: 8),
+                    margin: const EdgeInsets.only(right: 8, top: 8),
                     padding: const EdgeInsets.all(8),
                     decoration: BoxDecoration(
                       color: Theme.of(context).primaryColor,
                     ),
                     child: Text(
                       DateFormat.Hm().format(schedule.intakeTime),
-                      style: TextStyle(
+                      style: const TextStyle(
                         color: Colors.white,
                       ),
                     ),
@@ -138,12 +142,12 @@ class _MedicineFormEverydayState extends State<MedicineFormEveryday> {
               GestureDetector(
                 onTap: chooseTime,
                 child: Container(
-                  margin: EdgeInsets.only(right: 8, top: 8),
+                  margin: const EdgeInsets.only(right: 8, top: 8),
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                   ),
-                  child: Text(
+                  child: const Text(
                     '+ Add',
                     style: TextStyle(
                       color: Colors.white,

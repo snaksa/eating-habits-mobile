@@ -4,9 +4,9 @@ import 'package:provider/provider.dart';
 
 import '../auth.dart';
 import '../../providers/water-povider.dart';
-import '../../widgets/charts/water-supply-chart.dart';
+import './widgets/water-supply-chart.dart';
 import '../../widgets/dialog.dart' as dialog;
-import '../../widgets/water-daily-summary.dart';
+import './widgets/water-daily-summary.dart';
 
 class WaterSupplyStatsScreen extends StatefulWidget {
   @override
@@ -57,43 +57,48 @@ class _WaterSupplyStatsScreenState extends State<WaterSupplyStatsScreen> {
       ),
       child: LayoutBuilder(
         builder: (BuildContext ctx, BoxConstraints constraints) =>
-            Consumer<WaterProvider>(
-          builder: (ctx, provider, _) => this._isLoading
-              ? Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CircularProgressIndicator(),
-                  ],
-                )
-              : provider.all.length <= 0
-                  ? Center(
-                      child: Text('No records yet'),
-                    )
-                  : Column(
-                      children: <Widget>[
-                        Container(
-                          height: constraints.maxHeight *
-                              (constraints.maxHeight < 600 ? 0.5 : 0.4),
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 16),
-                            child: WaterSupplyChart(provider.all),
+            SingleChildScrollView(
+          child: Consumer<WaterProvider>(
+            builder: (ctx, provider, _) => this._isLoading
+                ? Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CircularProgressIndicator(),
+                    ],
+                  )
+                : provider.all.length <= 0
+                    ? Center(
+                        child: const Text('No records yet'),
+                      )
+                    : Column(
+                        children: <Widget>[
+                          Container(
+                            height: constraints.maxHeight *
+                                (constraints.maxHeight < 600 ? 0.5 : 0.4),
+                            child: Padding(
+                              padding: const EdgeInsets.only(top: 16),
+                              child: WaterSupplyChart(provider.all),
+                            ),
                           ),
-                        ),
-                        Container(
-                          height: constraints.maxHeight *
-                              (constraints.maxHeight < 500 ? 0.5 : 0.6),
-                          child: ListView.builder(
-                            itemCount: provider.all.length,
-                            itemBuilder: (BuildContext ctx, int index) {
-                              return WaterDailySummary(
-                                provider.all[index],
-                                DateFormat.yMMMd(),
-                              );
-                            },
+                          Card(
+                            child: Container(
+                              height: constraints.maxHeight *
+                                  (constraints.maxHeight < 600 ? 0.5 : 0.6),
+                              child: ListView.builder(
+                                itemCount: provider.all.length,
+                                itemBuilder: (BuildContext ctx, int index) {
+                                  return WaterDailySummary(
+                                    provider.all[index],
+                                    DateFormat.yMMMd(),
+                                    true,
+                                  );
+                                },
+                              ),
+                            ),
                           ),
-                        ),
-                      ],
-                    ),
+                        ],
+                      ),
+          ),
         ),
       ),
     );

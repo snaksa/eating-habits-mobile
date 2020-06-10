@@ -10,7 +10,7 @@ class Dialog {
   Future<bool> show(BuildContext context) {
     var actions = [
       FlatButton(
-        child: Text('Okay'),
+        child: const Text('Okay'),
         onPressed: () {
           Navigator.of(context).pop();
         },

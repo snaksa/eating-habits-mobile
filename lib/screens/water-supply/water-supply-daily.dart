@@ -5,10 +5,9 @@ import 'package:provider/provider.dart';
 import '../auth.dart';
 import '../../models/water.dart';
 import '../../providers/water-povider.dart';
-import '../../exceptions/http_exception.dart';
-import '../../widgets/water-daily-stats.dart';
 import '../../widgets/dialog.dart' as dialog;
-import '../../widgets/water-daily-summary.dart';
+import './widgets/water-daily-chart.dart';
+import './widgets/water-daily-summary.dart';
 
 class WaterSupplyDailyScreen extends StatefulWidget {
   static const String routeName = '/water-supply-daily';
@@ -105,7 +104,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                     )
                   : waterRecords.length <= 0
                       ? Center(
-                          child: Text('No records yet'),
+                          child: const Text('No records yet'),
                         )
                       : Column(
                           children: <Widget>[
@@ -121,72 +120,20 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                                       ? 'Today'
                                       : DateFormat.yMMMd().format(date)),
                             ),
-                            Container(
-                              height: availableHeight *
-                                  (mediaQuery.size.height < 600 ? 0.75 : 0.8),
-                              child: ListView.builder(
-                                itemCount: waterRecords.length,
-                                itemBuilder: (BuildContext ctx, int index) {
-                                  return Dismissible(
-                                    key: ValueKey(waterRecords[index].id),
-                                    background: Container(
-                                      color: Theme.of(context).errorColor,
-                                      child: const Icon(
-                                        Icons.delete,
-                                        color: Colors.white,
-                                        size: 40,
-                                      ),
-                                      alignment: Alignment.centerLeft,
-                                      padding: const EdgeInsets.only(left: 20),
-                                      margin: const EdgeInsets.symmetric(
-                                        horizontal: 15,
-                                        vertical: 4,
-                                      ),
-                                    ),
-                                    direction: DismissDirection.startToEnd,
-                                    onDismissed: (_) {
-                                      try {
-                                        Provider.of<WaterProvider>(context,
-                                                listen: false)
-                                            .removeWaterRecord(
-                                                waterRecords[index]);
-                                      } on HttpException catch (error) {
-                                        dialog.Dialog(
-                                          'An Error Occurred!',
-                                          error.message,
-                                          {
-                                            'Okay': () {
-                                              Navigator.of(context).pop();
-                                              if (error.status == 403) {
-                                                Navigator.of(context)
-                                                    .popAndPushNamed(
-                                                        AuthScreen.routeName);
-                                              }
-                                            }
-                                          },
-                                        ).show(context);
-                                      }
-                                    },
-                                    confirmDismiss: (_) {
-                                      return dialog.Dialog(
-                                        'Are you sure?',
-                                        'The item will be deleted',
-                                        {
-                                          'Yes': () {
-                                            Navigator.of(ctx).pop(true);
-                                          },
-                                          'No': () {
-                                            Navigator.of(ctx).pop(false);
-                                          }
-                                        },
-                                      ).show(context);
-                                    },
-                                    child: WaterDailySummary(
+                            Card(
+                              child: Container(
+                                height: availableHeight *
+                                    (mediaQuery.size.height < 600 ? 0.75 : 0.8),
+                                child: ListView.builder(
+                                  itemCount: waterRecords.length,
+                                  itemBuilder: (BuildContext ctx, int index) {
+                                    return WaterDailySummary(
                                       waterRecords[index],
                                       DateFormat.Hm(),
-                                    ),
-                                  );
-                                },
+                                      false
+                                    );
+                                  },
+                                ),
                               ),
                             ),
                           ],

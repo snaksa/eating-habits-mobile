@@ -1,15 +1,15 @@
-import 'package:eating_habits_mobile/models/medicine-schedule.dart';
-import 'package:eating_habits_mobile/widgets/forms/medicine-form-everyday.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/medicine.dart';
-import '../../providers/medicine-provider.dart';
-import '../../screens/auth.dart';
-import '../../exceptions/http_exception.dart';
-import '../../widgets/dialog.dart' as dialog;
-import '../../constants/medicine-frequency.dart' as MedicineFrequency;
+import '../../../models/medicine-schedule.dart';
+import './medicine-form-everyday.dart';
+import '../../../models/medicine.dart';
+import '../../../providers/medicine-provider.dart';
+import '../../auth.dart';
+import '../../../exceptions/http_exception.dart';
+import '../../../widgets/dialog.dart' as dialog;
+import '../../../constants/medicine-frequency.dart' as MedicineFrequency;
 
 class MedicineForm extends StatefulWidget {
   static final String routeName = '/medicine-form';
@@ -194,6 +194,23 @@ class _MedicineFormState extends State<MedicineForm> {
       return;
     }
 
+    bool confirmed = await dialog.Dialog(
+      'Are you sure?',
+      'The item will be deleted',
+      {
+        'Yes': () {
+          Navigator.of(context).pop(true);
+        },
+        'No': () {
+          Navigator.of(context).pop(false);
+        }
+      },
+    ).show(context);
+
+    if (!confirmed) {
+      return;
+    }
+
     try {
       setState(() {
         _isDeletingLoading = true;
@@ -235,14 +252,14 @@ class _MedicineFormState extends State<MedicineForm> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Add Record',
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[
           _isLoading
               ? Container(
-                  padding: EdgeInsets.all(10),
+                  padding: const EdgeInsets.all(10),
                   child: CircularProgressIndicator(),
                 )
               : IconButton(
@@ -340,8 +357,8 @@ class _MedicineFormState extends State<MedicineForm> {
                                 padding: const EdgeInsets.only(left: 8),
                                 child: TextFormField(
                                   readOnly: true,
-                                  decoration:
-                                      InputDecoration(labelText: 'Intake Time'),
+                                  decoration: const InputDecoration(
+                                      labelText: 'Intake Time'),
                                   controller: timeController,
                                   validator: (value) {
                                     if (_formData['time'] == null &&
@@ -362,7 +379,7 @@ class _MedicineFormState extends State<MedicineForm> {
                             ? TextFormField(
                                 initialValue:
                                     _formData['periodSpan'].toString(),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                     labelText: 'Period in days'),
                                 keyboardType: TextInputType.number,
                                 validator: (value) {

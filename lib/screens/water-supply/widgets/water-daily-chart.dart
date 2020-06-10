@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:percent_indicator/linear_percent_indicator.dart';
 
@@ -19,14 +18,13 @@ class WaterDailyStats extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 16),
       child: Card(
-        elevation: 3,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Text(
                 this.label,
-                style: TextStyle(
+                style: const TextStyle(
                   fontWeight: FontWeight.bold,
                 ),
               ),
@@ -37,8 +35,7 @@ class WaterDailyStats extends StatelessWidget {
                 animation: true,
                 lineHeight: 20.0,
                 animationDuration: 500,
-                percent:
-                    current / target > 1 ? 1 : current / target,
+                percent: current / target > 1 ? 1 : current / target,
                 center: Text('${current}ml of ${target}ml',
                     style: TextStyle(color: Colors.white)),
                 linearStrokeCap: LinearStrokeCap.roundAll,

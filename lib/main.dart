@@ -7,14 +7,14 @@ import './providers/water-povider.dart';
 import './providers/weight-provider.dart';
 import './providers/medicine-provider.dart';
 import './screens/water-supply/water-supply.dart';
-import './screens/weight-balance.dart';
+import './screens/weight/weight-balance.dart';
 import './screens/water-supply/water-supply-daily.dart';
 import './screens/medicine/medicine.dart';
 import './screens/auth.dart';
 import './screens/register.dart';
-import './widgets/forms/water-supply-form.dart';
-import './widgets/forms/weight-form.dart';
-import './widgets/forms/medicine-form.dart';
+import './screens/water-supply/forms/water-supply-form.dart';
+import './screens/weight/widgets/weight-form.dart';
+import './screens/medicine/forms/medicine-form.dart';
 
 Future main() async {
   await DotEnv().load('.env');

@@ -4,7 +4,7 @@ import 'package:provider/provider.dart';
 import '../providers/auth.dart';
 import '../screens/auth.dart';
 import '../screens/water-supply/water-supply.dart';
-import '../screens/weight-balance.dart';
+import '../screens/weight/weight-balance.dart';
 import '../screens/medicine/medicine.dart';
 
 class AppDrawer extends StatelessWidget {
@@ -14,14 +14,16 @@ class AppDrawer extends StatelessWidget {
       child: Column(
         children: <Widget>[
           AppBar(
-            title: Text(
+            title: const Text(
               'Eating Habits',
-              style: TextStyle(color: Colors.white),
+              style: TextStyle(
+                color: Colors.white,
+              ),
             ),
             automaticallyImplyLeading: false,
           ),
           ListTile(
-            leading: Icon(Icons.local_drink),
+            leading: const Icon(Icons.local_drink),
             title: const Text('Water Supply'),
             onTap: () {
               Navigator.of(context)
