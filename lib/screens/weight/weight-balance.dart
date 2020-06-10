@@ -111,7 +111,7 @@ class _WeightBalanceScreenState extends State<WeightBalanceScreen> {
                             ),
                             Card(
                               child: Container(
-                                height: availableHeight * 0.5,
+                                height: availableHeight * 0.55,
                                 child: ListView.builder(
                                   itemCount: provider.items.length,
                                   itemBuilder: (BuildContext ctx, int index) {
