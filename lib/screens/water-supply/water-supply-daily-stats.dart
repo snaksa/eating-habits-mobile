@@ -1,3 +1,4 @@
+import 'package:eating_habits_mobile/widgets/no-records.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -55,22 +56,23 @@ class _WaterSupplyStatsScreenState extends State<WaterSupplyStatsScreen> {
         right: 10,
         bottom: 0,
       ),
-      child: LayoutBuilder(
-        builder: (BuildContext ctx, BoxConstraints constraints) =>
-            SingleChildScrollView(
-          child: Consumer<WaterProvider>(
-            builder: (ctx, provider, _) => this._isLoading
-                ? Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CircularProgressIndicator(),
-                    ],
-                  )
-                : provider.all.length <= 0
-                    ? Center(
-                        child: const Text('No records yet'),
-                      )
-                    : Column(
+      child: Consumer<WaterProvider>(
+        builder: (ctx, provider, _) => this._isLoading
+            ? Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: CircularProgressIndicator(),
+                  ),
+                ],
+              )
+            : provider.all.length <= 0
+                ? NoRecords(null)
+                : LayoutBuilder(
+                    builder: (BuildContext ctx, BoxConstraints constraints) =>
+                        SingleChildScrollView(
+                      child: Column(
                         children: <Widget>[
                           Container(
                             height: constraints.maxHeight *
@@ -98,8 +100,8 @@ class _WaterSupplyStatsScreenState extends State<WaterSupplyStatsScreen> {
                           ),
                         ],
                       ),
-          ),
-        ),
+                    ),
+                  ),
       ),
     );
   }

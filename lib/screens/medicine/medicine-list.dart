@@ -3,8 +3,9 @@ import 'package:provider/provider.dart';
 
 import '../auth.dart';
 import '../../providers/medicine-provider.dart';
-import './widgets/medicine-summary.dart';
 import '../../widgets/dialog.dart' as dialog;
+import '../../widgets/no-records.dart';
+import './widgets/medicine-summary.dart';
 
 class MedicineListScreen extends StatefulWidget {
   @override
@@ -58,9 +59,7 @@ class _MedicineListScreenState extends State<MedicineListScreen> {
                   ],
                 )
               : provider.medicines.length <= 0
-                  ? Center(
-                      child: const Text('No records yet'),
-                    )
+                  ? NoRecords(null)
                   : Container(
                       height: double.infinity,
                       child: ListView.builder(

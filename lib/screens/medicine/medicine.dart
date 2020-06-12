@@ -29,7 +29,7 @@ class _MedicineScreenState extends State<MedicineScreen> {
               ),
               Tab(
                 icon: const Icon(
-                  Icons.insert_chart,
+                  Icons.list,
                   color: Colors.white,
                 ),
               ),

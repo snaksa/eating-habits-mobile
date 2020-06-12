@@ -252,8 +252,8 @@ class _MedicineFormState extends State<MedicineForm> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text(
-          'Add Record',
+        title: Text(
+          medicine != null ? 'Edit Record' : 'Add Record',
           style: TextStyle(color: Colors.white),
         ),
         actions: <Widget>[

@@ -6,6 +6,7 @@ import '../auth.dart';
 import '../../models/water.dart';
 import '../../providers/water-povider.dart';
 import '../../widgets/dialog.dart' as dialog;
+import '../../widgets/no-records.dart';
 import './widgets/water-daily-chart.dart';
 import './widgets/water-daily-summary.dart';
 
@@ -103,9 +104,7 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                       ],
                     )
                   : waterRecords.length <= 0
-                      ? Center(
-                          child: const Text('No records yet'),
-                        )
+                      ? NoRecords(availableHeight)
                       : Column(
                           children: <Widget>[
                             Container(
@@ -128,10 +127,9 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
                                   itemCount: waterRecords.length,
                                   itemBuilder: (BuildContext ctx, int index) {
                                     return WaterDailySummary(
-                                      waterRecords[index],
-                                      DateFormat.Hm(),
-                                      false
-                                    );
+                                        waterRecords[index],
+                                        DateFormat.Hm(),
+                                        false);
                                   },
                                 ),
                               ),

@@ -89,7 +89,9 @@ class WaterProvider with ChangeNotifier {
       data.add(Water.fromJSON(item));
     });
 
-    _all = data;
+
+    _all = data.where((element) => element.amount > 0).length > 0 ? [...data] : [];
+
     notifyListeners();
   }
 
@@ -113,17 +115,25 @@ class WaterProvider with ChangeNotifier {
     }
 
     // update chart data
+    bool found = false;
     var chartData = _all.map((Water item) {
       if (newRecord.date.year == item.date.year &&
           newRecord.date.month == item.date.month &&
           newRecord.date.day == item.date.day) {
+            found = true;
         return Water(amount: item.amount + newRecord.amount, date: item.date);
       }
 
       return item;
     });
 
+    if(found) {
     _all = [...chartData];
+    }
+    else {
+      _all = [];
+      this.fetchAndSetWaterRecords();
+    }
 
     notifyListeners();
   }
@@ -143,7 +153,7 @@ class WaterProvider with ChangeNotifier {
       return item;
     });
 
-    _all = [...chartData];
+    _all = chartData.where((element) => element.amount > 0).length > 0 ? [...chartData] : [];
 
     notifyListeners();
 

@@ -5,6 +5,7 @@ import '../auth.dart';
 import '../../providers/weight-provider.dart';
 import '../../widgets/drawer.dart';
 import '../../widgets/dialog.dart' as dialog;
+import '../../widgets/no-records.dart';
 import './widgets/weight-stats.dart';
 import './widgets/weight-summary.dart';
 import './widgets/weight-chart.dart';
@@ -91,9 +92,7 @@ class _WeightBalanceScreenState extends State<WeightBalanceScreen> {
                       ],
                     )
                   : provider.items.length <= 0
-                      ? Center(
-                          child: const Text('No records yet'),
-                        )
+                      ? NoRecords(availableHeight)
                       : Column(
                           children: <Widget>[
                             Container(

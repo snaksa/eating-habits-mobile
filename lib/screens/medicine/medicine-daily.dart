@@ -72,7 +72,15 @@ class _MedicineDailyScreenState extends State<MedicineDailyScreen> {
                           child: ListView.builder(
                             itemCount: provider.schedule.length,
                             itemBuilder: (BuildContext ctx, int index) {
-                              return Card(
+                              return Container(
+                                decoration: const BoxDecoration(
+                                  border: Border(
+                                    bottom: BorderSide(
+                                      color: Colors.grey,
+                                      width: 0.3,
+                                    ),
+                                  ),
+                                ),
                                 child: Padding(
                                   padding: const EdgeInsets.all(8.0),
                                   child: Row(
