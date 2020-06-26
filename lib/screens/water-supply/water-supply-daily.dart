@@ -1,3 +1,7 @@
+import 'package:eating_habits_mobile/models/user.dart';
+import 'package:eating_habits_mobile/providers/auth.dart';
+import 'package:eating_habits_mobile/providers/weight-provider.dart';
+import 'package:eating_habits_mobile/services/calculation-helper.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
@@ -22,12 +26,16 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
   var _isLoading = false;
 
   @override
-  void didChangeDependencies() {
+  void didChangeDependencies() async {
     if (_isInit) {
       setState(() {
         _isLoading = true;
       });
       var date = this.getDate();
+
+      Provider.of<WeightProvider>(context, listen: false)
+          .fetchAndSetWeightRecords();
+
       Provider.of<WaterProvider>(context)
           .fetchAndSetByDateWaterRecords(date)
           .then(
@@ -65,7 +73,21 @@ class _WaterSupplyDailyScreenState extends State<WaterSupplyDailyScreen> {
   Widget content(AppBar appBar) {
     final mediaQuery = MediaQuery.of(context);
 
+    User me = Provider.of<Auth>(context, listen: true).me;
+    bool dynamicCalculation = me.waterCalculation;
     int target = 5000;
+    if (dynamicCalculation) {
+      var weightRecords =
+          Provider.of<WeightProvider>(context, listen: true).items;
+      var lastWeightRecord =
+          weightRecords.length > 0 ? weightRecords.first : null;
+      target =
+          CalculationHelper().calculateDynamicWeight(lastWeightRecord).ceil();
+    }
+    else {
+      target = me.waterAmount;
+    }
+
     final availableHeight = mediaQuery.size.height -
         appBar.preferredSize.height -
         mediaQuery.padding.top;

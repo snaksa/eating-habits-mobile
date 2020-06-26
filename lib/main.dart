@@ -15,6 +15,7 @@ import './screens/register.dart';
 import './screens/water-supply/forms/water-supply-form.dart';
 import './screens/weight/widgets/weight-form.dart';
 import './screens/medicine/forms/medicine-form.dart';
+import './screens/user/user-form.dart';
 
 Future main() async {
   await DotEnv().load('.env');
@@ -93,6 +94,7 @@ class MyApp extends StatelessWidget {
               WaterSupplyForm.routeName: (ctx) => WaterSupplyForm(),
               MedicineScreen.routeName: (ctx) => MedicineScreen(),
               MedicineForm.routeName: (ctx) => MedicineForm(),
+              UserForm.routeName: (ctx) => UserForm(),
               AuthScreen.routeName: (ctx) => AuthScreen(),
               RegisterScreen.routeName: (ctx) => RegisterScreen(),
             }),
