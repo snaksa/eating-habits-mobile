@@ -59,7 +59,12 @@ class MedicineProvider with ChangeNotifier {
     final extractedData = responseData['data'];
     final newRecord = Medicine.fromJSON(extractedData);
 
-    _medicines.add(newRecord);
+    if (_medicines.length > 0) {
+      _medicines.add(newRecord);
+    }
+    else {
+      this.fetchMedicineRecords();
+    }
 
     notifyListeners();
 
@@ -216,11 +221,12 @@ class MedicineProvider with ChangeNotifier {
 
   Future<MedicineIntake> addIntake(
       MedicineIntake record, MedicineSchedule schedule) async {
+        print(schedule.intakeTime);
     final responseData = await http.Request(this.authToken).post(
       'medicines-intake',
       {
         'medicineScheduleId': schedule.id,
-        'date': DateFormat('y-MM-dd H:mm:ss').format(schedule.intakeTime),
+        'date': DateFormat('y-MM-dd H:mm:ss').format(schedule.intakeTime.toUtc()),
       },
     );
 

@@ -46,8 +46,8 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<Auth, MedicineProvider>(
           update: (ctx, auth, previous) => MedicineProvider(
             auth.token,
-            previous != null ? previous.medicines : [],
-            previous != null ? previous.schedule : [],
+            [],
+            [],
           ),
         ),
       ],
