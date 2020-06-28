@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
                                 .connectionState ==
                             ConnectionState.waiting
                         ? Scaffold(
-                            body: Container(child: CircularProgressIndicator()))
+                            body: Center(child: Container(child: CircularProgressIndicator())))
                         : AuthScreen(),
                   ),
             routes: {
