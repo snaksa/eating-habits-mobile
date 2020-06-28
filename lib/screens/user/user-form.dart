@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 import '../auth.dart';
@@ -45,8 +44,8 @@ class _UserFormState extends State<UserForm> {
       User user = Provider.of<Auth>(context, listen: false).me;
       _formData['username'] = user.username;
       _formData['name'] = user.name;
-      _formData['age'] = user.age ?? 0;
-      _formData['height'] = user.height ?? 0;
+      _formData['age'] = user.age ?? '';
+      _formData['height'] = user.height ?? '';
       _formData['gender'] = user.gender;
       _formData['lang'] = user.lang;
       _formData['water_calculation'] = user.waterCalculation;
@@ -81,7 +80,12 @@ class _UserFormState extends State<UserForm> {
       });
       await Provider.of<Auth>(context, listen: false).editUser(_formData);
 
-      await Navigator.of(context).popAndPushNamed(WaterSupplyScreen.routeName);
+      if (Navigator.of(context).canPop()) {
+        Navigator.of(context).pop();
+      } else {
+        await Navigator.of(context)
+            .popAndPushNamed(WaterSupplyScreen.routeName);
+      }
     } on HttpException catch (error) {
       dialog.Dialog(
         'An Error Occurred!',

@@ -7,7 +7,7 @@ import './providers/water-povider.dart';
 import './providers/weight-provider.dart';
 import './providers/medicine-provider.dart';
 import './screens/water-supply/water-supply.dart';
-import './screens/weight/weight-balance.dart';
+import './screens/weight/weight.dart';
 import './screens/water-supply/water-supply-daily.dart';
 import './screens/medicine/medicine.dart';
 import './screens/auth.dart';
@@ -33,21 +33,21 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProxyProvider<Auth, WeightProvider>(
           update: (ctx, auth, previous) => WeightProvider(
             auth.token,
-            [],
+            auth.token != null && previous != null ? previous.items : [],
           ),
         ),
         ChangeNotifierProxyProvider<Auth, WaterProvider>(
           update: (ctx, auth, previous) => WaterProvider(
             auth.token,
-            [],
-            [],
+            auth.token != null && previous != null ? previous.today : [],
+            auth.token != null && previous != null ? previous.all : [],
           ),
         ),
         ChangeNotifierProxyProvider<Auth, MedicineProvider>(
           update: (ctx, auth, previous) => MedicineProvider(
             auth.token,
-            [],
-            [],
+            auth.token != null && previous != null ? previous.medicines : [],
+            auth.token != null && previous != null ? previous.schedule : [],
           ),
         ),
       ],
@@ -89,7 +89,7 @@ class MyApp extends StatelessWidget {
               WaterSupplyScreen.routeName: (ctx) => WaterSupplyScreen(),
               WaterSupplyDailyScreen.routeName: (ctx) =>
                   WaterSupplyDailyScreen(),
-              WeightBalanceScreen.routeName: (ctx) => WeightBalanceScreen(),
+              WeightScreen.routeName: (ctx) => WeightScreen(),
               WeightForm.routeName: (ctx) => WeightForm(),
               WaterSupplyForm.routeName: (ctx) => WaterSupplyForm(),
               MedicineScreen.routeName: (ctx) => MedicineScreen(),

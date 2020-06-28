@@ -8,7 +8,7 @@ class WeightStats extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 8, bottom: 8),
+      padding: const EdgeInsets.only(top: 16, bottom: 8),
       child: Card(
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 16),
